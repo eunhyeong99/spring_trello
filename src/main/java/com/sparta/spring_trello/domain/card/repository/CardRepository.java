@@ -1,4 +1,4 @@
 package com.sparta.spring_trello.domain.card.repository;
 
-public class a {
+public class CardRepository {
 }

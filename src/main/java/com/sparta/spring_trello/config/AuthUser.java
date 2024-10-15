@@ -1,6 +1,6 @@
 package com.sparta.spring_trello.config;
 
-import com.sparta.spring_trello.entity.UserRole;
+import com.sparta.spring_trello.domain.user.entity.UserRole;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

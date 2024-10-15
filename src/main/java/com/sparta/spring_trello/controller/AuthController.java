@@ -1,8 +1,8 @@
 package com.sparta.spring_trello.controller;
 
-import com.sparta.spring_trello.dto.SigninRequest;
-import com.sparta.spring_trello.dto.SignupRequest;
-import com.sparta.spring_trello.service.AuthService;
+import com.sparta.spring_trello.domain.user.dto.SigninRequest;
+import com.sparta.spring_trello.domain.user.dto.SignupRequest;
+import com.sparta.spring_trello.domain.user.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

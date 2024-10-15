@@ -1,4 +1,4 @@
-package com.sparta.spring_trello.entity;
+package com.sparta.spring_trello.domain.user.entity;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

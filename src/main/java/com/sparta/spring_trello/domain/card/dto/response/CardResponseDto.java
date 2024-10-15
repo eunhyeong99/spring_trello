@@ -1,4 +1,4 @@
 package com.sparta.spring_trello.domain.card.dto.response;
 
-public class a {
+public class CardResponseDto {
 }
