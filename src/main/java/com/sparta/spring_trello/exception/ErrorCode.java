@@ -8,14 +8,14 @@ import lombok.Getter;
 @Getter
 public enum ErrorCode implements CodeInterface {
 
-    /*
-    SUCCESS(0,"Success"),
-    USER_ALREADY_EXIST(-1,"Already exist"),
-    USER_SAVED_FAILED(-2,"USER_SAVED_FAILED"),
-    USER_NOT_FOUND(-3,"USER_NOT_FOUND"),
-    MIS_MATCH_PASSWORD(-4,"MIS_MATCH_PASSWORD");
-    */
+    OK(200, "OK"),
+    CREATED(201, "CREATED"),
+    BAD_REQUEST(400, "BAD_REQUEST"),
+    UNAUTHORIZED(401, "UNAUTHORIZED"),
+    NOT_FOUND(404, "NOT_FOUND"),
+    INTERNAL_SERVER_ERROR(500, "INTERNAL_SERVER_ERROR"),
+    NOT_IMPLEMENTED(501, "NOT_IMPLEMENTED");
 
     private final Integer code;
     private final String message;
-}
+    }
