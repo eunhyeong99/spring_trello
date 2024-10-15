@@ -3,8 +3,7 @@ package com.sparta.spring_trello.domain.list.controller;
 import com.sparta.spring_trello.domain.list.dto.request.ListsRequestDto;
 import com.sparta.spring_trello.domain.list.dto.response.ListsResponseDto;
 import com.sparta.spring_trello.domain.list.service.ListsService;
-import com.sparta.spring_trello.exception.CustomException;
-import com.sparta.spring_trello.exception.ErrorCode;
+import com.sparta.spring_trello.util.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,9 +26,8 @@ public class ListsController {
      * @return 생성된 리스트에 대한 응답 DTO(boardId,id,title,order)
      */
     @PostMapping("{boardId}/lists")
-    public ResponseEntity<ListsResponseDto> createList(@PathVariable Long boardId, @RequestBody String title) {
-//        ListsResponseDto responseDto = listsService.createList(boardId, title); // 데이터 포함하여 코드 반환
-        return ResponseEntity.ok(listsService.createList(boardId, title));
+    public ResponseEntity<ApiResponse<ListsResponseDto>> createList(@PathVariable Long boardId, @RequestBody String title) {
+        return ResponseEntity.ok(ApiResponse.success(listsService.createList(boardId, title)));
     }
 
     /**
@@ -41,11 +39,11 @@ public class ListsController {
      * @return 수정된 리스트에 대한 응답 DTO
      */
     @PutMapping("{boardId}/lists/{listsId}")
-    public ResponseEntity<ListsResponseDto> updateList(
+    public ResponseEntity<ApiResponse<ListsResponseDto>> updateList(
             @PathVariable Long boardId,
             @PathVariable Long listsId,
             @RequestBody ListsRequestDto listsRequestDto) {
-        return ResponseEntity.ok(listsService.updateList(boardId, listsId, listsRequestDto));
+        return ResponseEntity.ok(ApiResponse.success(listsService.updateList(boardId, listsId, listsRequestDto)));
     }
 
     /**
@@ -56,9 +54,9 @@ public class ListsController {
      * @return 삭제 성공 메시지
      */
     @DeleteMapping("{boardId}/lists/{listsId}")
-    public ResponseEntity<?> deleteList(@PathVariable Long boardId, @PathVariable Long listsId) {
+    public ResponseEntity<ApiResponse<?>> deleteList(@PathVariable Long boardId, @PathVariable Long listsId) {
         listsService.deleteLists(boardId, listsId);
-        return ResponseEntity.ok(new CustomException(ErrorCode.SUCCESS));
+        return ResponseEntity.ok(ApiResponse.success(null));
     }
 
 }
