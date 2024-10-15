@@ -1,6 +1,6 @@
 package com.sparta.spring_trello.config;
 
-import com.sparta.spring_trello.entity.UserRole;
+import com.sparta.spring_trello.domain.user.entity.UserRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
