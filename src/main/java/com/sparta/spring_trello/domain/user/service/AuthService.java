@@ -1,11 +1,11 @@
-package com.sparta.spring_trello.service;
+package com.sparta.spring_trello.domain.user.service;
 
 import com.sparta.spring_trello.config.JwtUtil;
-import com.sparta.spring_trello.dto.SigninRequest;
-import com.sparta.spring_trello.dto.SignupRequest;
-import com.sparta.spring_trello.entity.User;
-import com.sparta.spring_trello.entity.UserRole;
-import com.sparta.spring_trello.repository.UserRepository;
+import com.sparta.spring_trello.domain.user.dto.SigninRequest;
+import com.sparta.spring_trello.domain.user.dto.SignupRequest;
+import com.sparta.spring_trello.domain.user.entity.User;
+import com.sparta.spring_trello.domain.user.entity.UserRole;
+import com.sparta.spring_trello.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
