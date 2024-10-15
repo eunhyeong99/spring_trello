@@ -17,7 +17,13 @@ import org.springframework.web.bind.annotation.*;
 public class MemberController {
     private final MemberService memberService;
 
-    // 멤버 추가
+    /**
+     * 멤버 추가
+     * @param authUser 로그인한 유저(=관리자)
+     * @param workspaceId 워크스페이스 ID
+     * @param memberRequest 멤버 생성에 필요한 정보(멤버가 될 유저의 ID, 멤버의 역할)
+     * @return MemberResponse 생성된 멤버의 정보(멤버ID, 멤버가 될 유저의 email, 멤버의 역할)
+     */
     @PostMapping
     public ResponseEntity<ApiResponse<MemberResponse>> addMember(
             @AuthenticationPrincipal AuthUser authUser,
@@ -27,7 +33,13 @@ public class MemberController {
         return ResponseEntity.ok(ApiResponse.success(memberService.addMember(authUser, workspaceId, memberRequest)));
     }
 
-    // 역할 수정
+    /**
+     * 멤버 역할 수정
+     * @param authUser 로그인한 유저(=관리자)
+     * @param memberId 수정할 멤버 ID
+     * @param role 수정할 멤버의 역할
+     * @return MemberResponse 수정된 멤버의 정보(멤버ID, 멤버가 될 유저의 email, 멤버의 역할)
+     */
     @PutMapping("/{memberId}/role")
     public ResponseEntity<ApiResponse<MemberResponse>> updateMemberRole(
             @AuthenticationPrincipal AuthUser authUser,
@@ -37,7 +49,11 @@ public class MemberController {
         return ResponseEntity.ok(ApiResponse.success(memberService.updateMemberRole(authUser, memberId, role));
     }
 
-    // 멤버 삭제
+    /**
+     * 멤버 삭제
+     * @param authUser 로그인한 유저(=관리자)
+     * @param memberId 삭제할 멤버 ID
+     */
     @DeleteMapping("/{memberId}")
     public ResponseEntity<ApiResponse<?>> removeMember(
             @AuthenticationPrincipal AuthUser authUser,
