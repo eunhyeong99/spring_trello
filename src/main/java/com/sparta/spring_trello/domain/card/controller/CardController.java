@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/cards")
 public class CardController {
 
-    private final CardService cardService;;
+    private final CardService cardService;
     private final UserRepository userRepository;
 
     @PostMapping
@@ -42,5 +42,12 @@ public class CardController {
 
         CardResponseDto updatedCard = cardService.updateCard(cardId, cardRequest, authUser);
         return ResponseEntity.ok(updatedCard);
+    }
+
+    // 카드 상세 조회 (활동 내역 및 댓글 포함)
+    @GetMapping("/{cardId}")
+    public ResponseEntity<CardResponseDto> getCardDetails(@PathVariable Long cardId) {
+        CardResponseDto cardDetails = cardService.getCardDetails(cardId);
+        return ResponseEntity.ok(cardDetails);
     }
 }

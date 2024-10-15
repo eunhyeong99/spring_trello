@@ -5,9 +5,11 @@ import com.sparta.spring_trello.domain.card.dto.request.CardRequestDto;
 import com.sparta.spring_trello.domain.card.dto.response.CardResponseDto;
 import com.sparta.spring_trello.domain.card.entity.Card;
 import com.sparta.spring_trello.domain.card.repository.CardRepository;
+import com.sparta.spring_trello.exception.CustomException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +27,11 @@ public class CardService {
                 .build();
 
         Card savedCard = cardRepository.save(card);
-        return new CardResponseDto(savedCard.getId(), savedCard.getTitle(), savedCard.getContents(), savedCard.getDeadline());
+        return new CardResponseDto(
+                savedCard.getId(),
+                savedCard.getTitle(),
+                savedCard.getContents(),
+                savedCard.getDeadline());
     }
 
     // 카드 수정
@@ -54,6 +60,21 @@ public class CardService {
                 updatedCard.getTitle(),
                 updatedCard.getContents(),
                 updatedCard.getDeadline()
+        );
+    }
+
+    // 카드 상세 조회
+    public CardResponseDto getCardDetails(Long cardId) {
+        Card card = cardRepository.findById(cardId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 카드를 찾을 수 없습니다."));
+
+        return new CardResponseDto(
+                card.getId(),
+                card.getTitle(),
+                card.getContents(),
+                card.getDeadline()
+//                card.getActivities(), // 활동 내역 추가
+//                card.getComments()     // 댓글 추가
         );
     }
 }
