@@ -30,4 +30,15 @@ public class Member extends Timestamped {
 
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
+
+//    public Member(User user, Workspace workspace, MemberRole memberRole) {
+//        this.user = user;
+//        this.workspace = workspace;
+//        this.memberRole = memberRole;
+//    }
+
+    // 멤버 역할 수정
+    public void update(MemberRole memberRole) {
+        this.memberRole = memberRole;
+    }
 }

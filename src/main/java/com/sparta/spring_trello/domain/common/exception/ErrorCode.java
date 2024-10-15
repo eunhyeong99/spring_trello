@@ -1,4 +1,4 @@
-package com.sparta.spring_trello.exception;
+package com.sparta.spring_trello.domain.common.exception;
 
 
 import lombok.AllArgsConstructor;
