@@ -50,4 +50,18 @@ public class CardController {
         CardResponseDto cardDetails = cardService.getCardDetails(cardId);
         return ResponseEntity.ok(cardDetails);
     }
+
+    // 카드 삭제
+    @DeleteMapping("/{cardId}")
+    public ResponseEntity<Void> deleteCard(
+            @PathVariable Long cardId,
+            @AuthenticationPrincipal AuthUser authUser) {
+
+        // 사용자 정보 확인
+        User user = userRepository.findById(authUser.getUserId())
+                .orElseThrow(() -> new EntityNotFoundException("사용자를 찾을 수 없습니다."));
+
+        cardService.deleteCard(cardId, authUser);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }

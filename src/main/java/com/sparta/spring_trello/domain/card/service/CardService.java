@@ -77,4 +77,19 @@ public class CardService {
 //                card.getComments()     // 댓글 추가
         );
     }
+
+    // 카드 삭제
+    @Transactional
+    public void deleteCard(Long cardId, AuthUser authUser) {
+        Card card = cardRepository.findById(cardId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 카드를 찾을 수 없습니다."));
+
+//        // 읽기 전용 권한 확인
+//        if (authUser.isReadOnly()) {
+//            throw new CustomException(,"Read-only members cannot delete cards");
+//        }
+
+        // 카드 삭제
+        cardRepository.delete(card);
+    }
 }
