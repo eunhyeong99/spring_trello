@@ -10,6 +10,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,11 +22,25 @@ public class CardController {
     private final UserRepository userRepository;
 
     @PostMapping
-    public ResponseEntity<CardResponseDto> createCard(@RequestBody CardRequestDto cardRequest, AuthUser authUser) {
+    public ResponseEntity<CardResponseDto> createCard(@RequestBody CardRequestDto cardRequest, @AuthenticationPrincipal AuthUser authUser) {
         User user = userRepository.findById(authUser.getUserId())
                 .orElseThrow(() -> new EntityNotFoundException("사용자를 찾을 수 없습니다."));
 
         CardResponseDto createdCard = cardService.createCard(cardRequest, authUser);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdCard);
+    }
+
+    // 카드 수정
+    @PutMapping("/{cardId}")
+    public ResponseEntity<CardResponseDto> updateCard(
+            @PathVariable Long cardId,
+            @RequestBody CardRequestDto cardRequest,
+            @AuthenticationPrincipal AuthUser authUser) {
+
+        User user = userRepository.findById(authUser.getUserId())
+                .orElseThrow(() -> new EntityNotFoundException("사용자를 찾을 수 없습니다."));
+
+        CardResponseDto updatedCard = cardService.updateCard(cardId, cardRequest, authUser);
+        return ResponseEntity.ok(updatedCard);
     }
 }

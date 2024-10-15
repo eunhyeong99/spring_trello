@@ -25,4 +25,10 @@ public class Card extends Timestamped {
     private String title;
     private String contents;
     private LocalDate deadline;
+
+    public void updateCard(String title, String contents, LocalDate deadline) {
+        this.title = title;
+        this.contents = contents;
+        this.deadline = deadline;
+    }
 }
