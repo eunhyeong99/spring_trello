@@ -2,6 +2,7 @@ package com.sparta.spring_trello.domain.card.service;
 
 import com.sparta.spring_trello.config.AuthUser;
 import com.sparta.spring_trello.domain.card.dto.request.CardRequestDto;
+import com.sparta.spring_trello.domain.card.dto.response.CardDetailResponseDto;
 import com.sparta.spring_trello.domain.card.dto.response.CardResponseDto;
 import com.sparta.spring_trello.domain.card.entity.Activity;
 import com.sparta.spring_trello.domain.card.entity.Card;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class CardService {
 
@@ -34,10 +36,12 @@ public class CardService {
             throw new CustomException(ErrorCode.READ_ONLY_MEMBER);
         }
 
+        // 카드 생성 시 작성자 ID 설정
         Card card = Card.builder()
                 .title(cardRequest.getTitle())
                 .contents(cardRequest.getContents())
                 .deadline(cardRequest.getDeadline())
+                .userId(authUser.getUserId())
                 .build();
 
         Card savedCard = cardRepository.save(card);
@@ -45,7 +49,6 @@ public class CardService {
         // 활동 내역 추가 (카드 생성)
         Activity activity = new Activity(savedCard, "카드 생성", "카드가 생성되었습니다.");
         activityRepository.save(activity);
-
 
         return new CardResponseDto(
                 savedCard.getId(),
@@ -59,10 +62,14 @@ public class CardService {
 
     // 카드 수정
     public CardResponseDto updateCard(Long cardId, CardRequestDto cardRequest, AuthUser authUser) {
-
         // 카드 존재 여부 확인
         Card card = cardRepository.findById(cardId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 카드를 찾을 수 없습니다."));
+
+        // 카드 작성자인지 확인
+        if (!card.getUserId().equals(authUser.getUserId())) {
+            throw new CustomException(ErrorCode.NOT_CARD_AUTHOR);
+        }
 
         // 읽기 전용 권한 확인
         if (authUser.isReadOnly()) {
@@ -99,7 +106,7 @@ public class CardService {
     }
 
     // 카드 상세 조회
-    public CardResponseDto getCardDetails(Long cardId) {
+    public CardDetailResponseDto getCardDetails(Long cardId) {
         Card card = cardRepository.findById(cardId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 카드를 찾을 수 없습니다."));
 
@@ -109,21 +116,25 @@ public class CardService {
         // 카드에 해당하는 댓글 조회
         List<Comment> comments = commentRepository.findByCardId(cardId);
 
-        return new CardResponseDto(
-                card.getId(),
-                card.getTitle(),
-                card.getContents(),
-                card.getDeadline(),
-                activities,
-                comments
-        );
+        return CardDetailResponseDto.builder()
+                .id(card.getId())
+                .title(card.getTitle())
+                .contents(card.getContents())
+                .deadline(card.getDeadline())
+                .activities(activities)
+                .comments(comments)
+                .build();
     }
 
     // 카드 삭제
-    @Transactional
     public void deleteCard(Long cardId, AuthUser authUser) {
         Card card = cardRepository.findById(cardId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 카드를 찾을 수 없습니다."));
+
+        // 카드 작성자인지 확인
+        if (!card.getUserId().equals(authUser.getUserId())) {
+            throw new CustomException(ErrorCode.NOT_CARD_AUTHOR);
+        }
 
         // 읽기 전용 권한 확인
         if (authUser.isReadOnly()) {
