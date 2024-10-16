@@ -33,43 +33,38 @@ public class BoardController {
      */
     @PostMapping
     public ResponseEntity<ApiResponse<BoardResponseDto>> createBoard(
-            @RequestBody String email,
             @RequestBody BoardRequestDto boardRequestDto,
             @RequestBody(required = false) String backgroundColor,
             @RequestBody(required = false) String image
     ) {
-        return ResponseEntity.ok(ApiResponse.success(boardService.createBoard(email, boardRequestDto, backgroundColor, image)));
+        return ResponseEntity.ok(ApiResponse.success(boardService.createBoard( boardRequestDto, backgroundColor, image)));
     }
 
     /**
      * 사용자 이메일에 해당하는 모든 보드를 조회합니다.
      *
-     * @param email 사용자의 이메일
      * @return 사용자의 모든 보드에 대한 응답 DTO 리스트
      */
     @GetMapping
-    public ResponseEntity<ApiResponse<List<BoardSimpleResponseDto>>> getBoards(@RequestBody String email) {
-        return ResponseEntity.ok(ApiResponse.success(boardService.getBoards(email)));
+    public ResponseEntity<ApiResponse<List<BoardSimpleResponseDto>>> getBoards(@RequestBody Long id) {
+        return ResponseEntity.ok(ApiResponse.success(boardService.getBoards(id)));
     }
 
     /**
      * 특정 보드의 상세 정보를 조회합니다.
      *
-     * @param email   사용자의 이메일
      * @param boardId 조회할 보드 ID
      * @return 특정 보드에 대한 상세 응답 DTO
      */
     @GetMapping("/{boardId}")
     public ResponseEntity<ApiResponse<BoardDetailResponseDto>> getBoard(
-            @RequestBody String email,
             @PathVariable Long boardId) {
-        return ResponseEntity.ok(ApiResponse.success(boardService.getBoard(email, boardId)));
+        return ResponseEntity.ok(ApiResponse.success(boardService.getBoard( boardId)));
     }
 
     /**
      * 특정 보드를 수정합니다.
      *
-     * @param email           사용자의 이메일
      * @param boardId         삭제할 보드 ID
      * @param title           변경 할 제목
      * @param backgroundColor 변경 할 배경 컬러
@@ -78,24 +73,22 @@ public class BoardController {
      */
     @PutMapping("/{boardId}")
     public ResponseEntity<ApiResponse<BoardResponseDto>> updateBoard(
-            @RequestBody String email,
             @PathVariable Long boardId,
             @RequestBody String title,
             @RequestBody(required = false) String backgroundColor,
             @RequestBody(required = false) String image) {
-        return ResponseEntity.ok(ApiResponse.success(boardService.updateBoard(email, boardId, title, backgroundColor, image)));
+        return ResponseEntity.ok(ApiResponse.success(boardService.updateBoard( boardId, title, backgroundColor, image)));
     }
 
     /**
      * 특정 보드를 삭제합니다.
      *
-     * @param email   사용자의 이메일
      * @param boardId 삭제할 보드 ID
      * @return 삭제 성공 응답
      */
     @DeleteMapping("/{boardId}")
-    public ResponseEntity<ApiResponse<?>> deleteBoard(@RequestBody String email, @PathVariable Long boardId) {
-        boardService.deleteBoard(email, boardId);
+    public ResponseEntity<ApiResponse<?>> deleteBoard( @PathVariable Long boardId) {
+        boardService.deleteBoard( boardId);
         return ResponseEntity.ok(ApiResponse.success(null));
     }
 
