@@ -3,10 +3,15 @@ package com.sparta.spring_trello.domain.card.controller;
 import com.sparta.spring_trello.config.AuthUser;
 import com.sparta.spring_trello.domain.card.dto.request.CardRequestDto;
 import com.sparta.spring_trello.domain.card.dto.response.CardDetailResponseDto;
+import com.sparta.spring_trello.domain.card.entity.Card;
 import com.sparta.spring_trello.domain.card.service.CardService;
 import com.sparta.spring_trello.domain.user.repository.UserRepository;
 import com.sparta.spring_trello.util.ApiResponse;
+import com.sparta.spring_trello.domain.card.dto.request.CardSearchDTO;
+
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -52,5 +57,12 @@ public class CardController {
             @AuthenticationPrincipal AuthUser authUser) {
         cardService.deleteCard(cardId, authUser);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ApiResponse.success("카드가 삭제되었습니다."));
+    }
+
+    //카드 검색
+    @GetMapping("/search")
+    public ResponseEntity<Page<Card>> searchCards(@ModelAttribute CardSearchDTO criteria, Pageable pageable) {
+        Page<Card> cards = cardService.searchCards(criteria, pageable);
+        return ResponseEntity.ok(cards);
     }
 }

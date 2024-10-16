@@ -1,5 +1,6 @@
 package com.sparta.spring_trello.domain.card.entity;
 
+import com.sparta.spring_trello.domain.board.entity.Board;
 import com.sparta.spring_trello.domain.comment.entity.Comment;
 import com.sparta.spring_trello.domain.common.entity.Timestamped;
 import jakarta.persistence.*;
@@ -24,6 +25,10 @@ public class Card extends Timestamped {
     private String title;
     private String contents;
     private LocalDate deadline;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "board_id")
+    private Board board;
 
     @OneToMany(mappedBy = "card", cascade = CascadeType.ALL)
     private List<Activity> activities;  // 활동 내역

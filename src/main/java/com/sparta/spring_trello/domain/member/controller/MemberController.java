@@ -46,7 +46,7 @@ public class MemberController {
             @PathVariable("memberId") Long memberId,
             @RequestParam("role") MemberRole role
     ) {
-        return ResponseEntity.ok(ApiResponse.success(memberService.updateMemberRole(authUser, memberId, role));
+        return ResponseEntity.ok(ApiResponse.success(memberService.updateMemberRole(authUser, memberId, role)));
     }
 
     /**
