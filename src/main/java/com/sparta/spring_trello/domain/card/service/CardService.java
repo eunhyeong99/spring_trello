@@ -34,7 +34,7 @@ public class CardService {
     private final CardRepositoryCustom cardRepositoryCustom;
 
     // 카드 생성
-    public CardResponseDto createCard(CardRequestDto cardRequest, AuthUser authUser) {
+    public CardResponseDto createCard(AuthUser authUser, CardRequestDto cardRequest) {
 
         // 읽기 전용 권한 확인
         if (authUser.isReadOnly()) {
@@ -66,7 +66,7 @@ public class CardService {
     }
 
     // 카드 수정
-    public CardResponseDto updateCard(Long cardId, CardRequestDto cardRequest, AuthUser authUser) {
+    public CardResponseDto updateCard(AuthUser authUser, Long cardId, CardRequestDto cardRequest) {
         // 카드 존재 여부 확인
         Card card = cardRepository.findById(cardId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 카드를 찾을 수 없습니다."));
@@ -132,7 +132,7 @@ public class CardService {
     }
 
     // 카드 삭제
-    public void deleteCard(Long cardId, AuthUser authUser) {
+    public void deleteCard(AuthUser authUser, Long cardId) {
         Card card = cardRepository.findById(cardId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 카드를 찾을 수 없습니다."));
 
