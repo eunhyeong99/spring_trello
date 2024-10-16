@@ -3,9 +3,7 @@ package com.sparta.spring_trello.domain.comment.controller;
 import com.sparta.spring_trello.config.AuthUser;
 import com.sparta.spring_trello.domain.comment.dto.request.CommentRequestDto;
 import com.sparta.spring_trello.domain.comment.service.CommentService;
-import com.sparta.spring_trello.domain.user.entity.User;
-import com.sparta.spring_trello.domain.user.repository.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
+import com.sparta.spring_trello.util.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,22 +14,27 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/api/cards/{cardId}/comments")
 public class CommentController {
+
     private final CommentService commentService;
-    private final UserRepository userRepository;
 
     // 댓글 작성
     @PostMapping
-    public ResponseEntity<Void> createComment(
+    public ResponseEntity<ApiResponse<?>> createComment(
             @PathVariable Long cardId,
             @RequestBody CommentRequestDto commentRequest,
             @AuthenticationPrincipal AuthUser authUser) {
-
-        // 사용자 정보 확인
-        User user = userRepository.findById(authUser.getUserId())
-                .orElseThrow(() -> new EntityNotFoundException("사용자를 찾을 수 없습니다."));
-
-        // 댓글 작성 서비스 호출
         commentService.createComment(cardId, commentRequest, authUser);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success("댓글이 작성되었습니다."));
+    }
+
+    // 댓글 수정
+    @PutMapping("/{commentId}")
+    public ResponseEntity<ApiResponse<?>> updateComment(
+            @PathVariable Long commentId,
+            @PathVariable Long cardId,
+            @RequestBody CommentRequestDto commentRequest,
+            @AuthenticationPrincipal AuthUser authUser) {
+        commentService.updateComment(commentId, commentRequest, authUser);
+        return ResponseEntity.ok(ApiResponse.success("댓글이 수정되었습니다."));
     }
 }
