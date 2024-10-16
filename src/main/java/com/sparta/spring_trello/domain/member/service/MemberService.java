@@ -27,21 +27,17 @@ public class MemberService {
     @Transactional
     public MemberResponse addMember(AuthUser authUser, Long workspaceId, MemberRequest memberRequest) {
         // 로그인한 사용자가 관리자인지 확인
-        if (authUser.getAuthorities().stream()
-                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(UserRole.ROLE_ADMIN.name()))) {
-        } else {
-            throw new CustomException(ErrorCode.UNAUTHORIZED);  // 관리자 권한이 아닌 경우
-        }
+        validateAdminAuthority(authUser);
 
-        // 추가할 사용자 예외처리
+        // 추가할 사용자가 존재하는지 확인
         User user = userRepository.findById(memberRequest.getUserId())
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
 
-        // 추가할 워크스페이스 예외처리
+        // 추가할 워크스페이스가 존재하는지 확인
         Workspace workspace = workspaceRepository.findById(workspaceId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
 
-        // 이미 등록된 사용자 예외처리
+        // 이미 등록된 사용자인지 확인
         if (memberRepository.findByUserAndWorkspace(user, workspace).isPresent()) {
             throw new CustomException(ErrorCode.BAD_REQUEST);
         }
@@ -58,11 +54,7 @@ public class MemberService {
     @Transactional
     public MemberResponse updateMemberRole(AuthUser authUser, Long memberId, MemberRole newRole) {
         // 로그인한 사용자가 관리자인지 확인
-        if (authUser.getAuthorities().stream()
-                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(UserRole.ROLE_ADMIN.name()))) {
-        } else {
-            throw new CustomException(ErrorCode.UNAUTHORIZED);  // 관리자 권한이 아닌 경우
-        }
+        validateAdminAuthority(authUser);
 
         // 역할 수정할 멤버가 존재하는지 확인
         Member member = memberRepository.findById(memberId)
@@ -82,11 +74,7 @@ public class MemberService {
     @Transactional
     public void removeMember(AuthUser authUser, Long memberId) {
         // 로그인한 사용자가 관리자인지 확인
-        if (authUser.getAuthorities().stream()
-                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(UserRole.ROLE_ADMIN.name()))) {
-        } else {
-            throw new CustomException(ErrorCode.UNAUTHORIZED);  // 관리자 권한이 아닌 경우
-        }
+        validateAdminAuthority(authUser);
 
         // 삭제할 멤버가 존재하는지 확인
         Member member = memberRepository.findById(memberId)
@@ -94,5 +82,13 @@ public class MemberService {
 
         // 해당 멤버 삭제
         memberRepository.delete(member);
+    }
+
+    // 로그인한 사용자가 관리자 예외처리 메서드
+    private void validateAdminAuthority(AuthUser authUser) {
+        if (authUser.getAuthorities().stream()
+                .noneMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(UserRole.ROLE_ADMIN.name()))) {
+            throw new CustomException(ErrorCode.UNAUTHORIZED);
+        }
     }
 }
