@@ -3,6 +3,7 @@ package com.sparta.spring_trello.domain.card.entity;
 import com.sparta.spring_trello.domain.board.entity.Board;
 import com.sparta.spring_trello.domain.comment.entity.Comment;
 import com.sparta.spring_trello.domain.common.entity.Timestamped;
+import com.sparta.spring_trello.domain.list.entity.Lists;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -38,6 +39,10 @@ public class Card extends Timestamped {
 
     @Column(name = "user_id", nullable = false) // 작성자 ID 추가
     private Long userId; // 작성자 ID
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "lists_id", nullable = false)
+    private Lists lists;
 
     public void updateCard(String title, String contents, LocalDate deadline) {
         this.title = title;
