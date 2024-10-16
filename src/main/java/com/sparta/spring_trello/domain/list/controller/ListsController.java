@@ -26,8 +26,11 @@ public class ListsController {
      * @return 생성된 리스트에 대한 응답 DTO(boardId,id,title,order)
      */
     @PostMapping("{boardId}/lists")
-    public ResponseEntity<ApiResponse<ListsResponseDto>> createList(@PathVariable Long boardId, @RequestBody String title) {
-        return ResponseEntity.ok(ApiResponse.success(listsService.createList(boardId, title)));
+    public ResponseEntity<ApiResponse<ListsResponseDto>> createList(
+            @RequestBody String email,
+            @PathVariable Long boardId,
+            @RequestBody String title) {
+        return ResponseEntity.ok(ApiResponse.success(listsService.createList(email, boardId, title)));
     }
 
     /**
@@ -40,10 +43,11 @@ public class ListsController {
      */
     @PutMapping("{boardId}/lists/{listsId}")
     public ResponseEntity<ApiResponse<ListsResponseDto>> updateList(
+            @RequestBody String email,
             @PathVariable Long boardId,
             @PathVariable Long listsId,
             @RequestBody ListsRequestDto listsRequestDto) {
-        return ResponseEntity.ok(ApiResponse.success(listsService.updateList(boardId, listsId, listsRequestDto)));
+        return ResponseEntity.ok(ApiResponse.success(listsService.updateList(email, boardId, listsId, listsRequestDto)));
     }
 
     /**
@@ -54,8 +58,11 @@ public class ListsController {
      * @return 삭제 성공 메시지
      */
     @DeleteMapping("{boardId}/lists/{listsId}")
-    public ResponseEntity<ApiResponse<?>> deleteList(@PathVariable Long boardId, @PathVariable Long listsId) {
-        listsService.deleteLists(boardId, listsId);
+    public ResponseEntity<ApiResponse<?>> deleteList(
+            @RequestBody String email,
+            @PathVariable Long boardId,
+            @PathVariable Long listsId) {
+        listsService.deleteLists(email, boardId, listsId);
         return ResponseEntity.ok(ApiResponse.success(null));
     }
 
