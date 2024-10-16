@@ -14,7 +14,8 @@ public enum ErrorCode implements CodeInterface {
     UNAUTHORIZED(401, "UNAUTHORIZED"),
     NOT_FOUND(404, "NOT_FOUND"),
     INTERNAL_SERVER_ERROR(500, "INTERNAL_SERVER_ERROR"),
-    NOT_IMPLEMENTED(501, "NOT_IMPLEMENTED");
+    NOT_IMPLEMENTED(501, "NOT_IMPLEMENTED"),
+    READ_ONLY_MEMBER(403, "READ_ONLY_MEMBER");
 
     private final Integer code;
     private final String message;

@@ -1,5 +1,6 @@
 package com.sparta.spring_trello.domain.card.dto.response;
 
+import com.sparta.spring_trello.domain.card.entity.Activity;
 import com.sparta.spring_trello.domain.comment.entity.Comment;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,6 +17,6 @@ public class CardResponseDto {
     private String title;
     private String contents;
     private LocalDate deadline;
-//    private final List<Activity> activities;
-//    private final List<Comment> comments;
+    private final List<Activity> activities;
+    private final List<Comment> comments;
 }

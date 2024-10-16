@@ -25,11 +25,11 @@ public class Card extends Timestamped {
     private String contents;
     private LocalDate deadline;
 
-//    @OneToMany(mappedBy = "card", cascade = CascadeType.ALL)
-//    private List<Activity> activities;  // 활동 내역
-//
-//    @OneToMany(mappedBy = "card", cascade = CascadeType.ALL)
-//    private List<Comment> comments;     // 댓글
+    @OneToMany(mappedBy = "card", cascade = CascadeType.ALL)
+    private List<Activity> activities;  // 활동 내역
+
+    @OneToMany(mappedBy = "card", cascade = CascadeType.ALL)
+    private List<Comment> comments;     // 댓글
 
     public void updateCard(String title, String contents, LocalDate deadline) {
         this.title = title;
