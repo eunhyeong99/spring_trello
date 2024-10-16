@@ -42,7 +42,7 @@ public class BoardController {
 
     /**
      * 사용자 이메일에 해당하는 모든 보드를 조회합니다.
-     *
+     * @param id 아이디
      * @return 사용자의 모든 보드에 대한 응답 DTO 리스트
      */
     @GetMapping
@@ -52,6 +52,7 @@ public class BoardController {
 
     /**
      * 특정 보드의 상세 정보를 조회합니다.
+     *
      *
      * @param boardId 조회할 보드 ID
      * @return 특정 보드에 대한 상세 응답 DTO
