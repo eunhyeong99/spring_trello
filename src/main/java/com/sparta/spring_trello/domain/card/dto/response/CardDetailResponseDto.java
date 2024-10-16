@@ -2,17 +2,15 @@ package com.sparta.spring_trello.domain.card.dto.response;
 
 import com.sparta.spring_trello.domain.card.entity.Activity;
 import com.sparta.spring_trello.domain.comment.entity.Comment;
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Getter
-@RequiredArgsConstructor
-@AllArgsConstructor
-public class CardResponseDto {
+@Builder
+public class CardDetailResponseDto {
     private Long id;
     private String title;
     private String contents;
