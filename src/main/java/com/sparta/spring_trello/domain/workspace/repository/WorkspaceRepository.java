@@ -1,7 +1,7 @@
 package com.sparta.spring_trello.domain.workspace.repository;
 
 import com.sparta.spring_trello.domain.workspace.entity.Workspace;
-import com.sparta.spring_trello.entity.User;
+import com.sparta.spring_trello.domain.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

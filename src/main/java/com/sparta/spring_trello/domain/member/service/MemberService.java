@@ -11,6 +11,8 @@ import com.sparta.spring_trello.domain.member.repository.MemberRepository;
 import com.sparta.spring_trello.domain.user.entity.User;
 import com.sparta.spring_trello.domain.user.entity.UserRole;
 import com.sparta.spring_trello.domain.user.repository.UserRepository;
+import com.sparta.spring_trello.domain.workspace.entity.Workspace;
+import com.sparta.spring_trello.domain.workspace.repository.WorkspaceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
