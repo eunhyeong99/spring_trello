@@ -27,10 +27,9 @@ public class ListsController {
      */
     @PostMapping("{boardId}/lists")
     public ResponseEntity<ApiResponse<ListsResponseDto>> createList(
-            @RequestBody String email,
             @PathVariable Long boardId,
             @RequestBody String title) {
-        return ResponseEntity.ok(ApiResponse.success(listsService.createList(email, boardId, title)));
+        return ResponseEntity.ok(ApiResponse.success(listsService.createList( boardId, title)));
     }
 
     /**
@@ -43,11 +42,10 @@ public class ListsController {
      */
     @PutMapping("{boardId}/lists/{listsId}")
     public ResponseEntity<ApiResponse<ListsResponseDto>> updateList(
-            @RequestBody String email,
             @PathVariable Long boardId,
             @PathVariable Long listsId,
             @RequestBody ListsRequestDto listsRequestDto) {
-        return ResponseEntity.ok(ApiResponse.success(listsService.updateList(email, boardId, listsId, listsRequestDto)));
+        return ResponseEntity.ok(ApiResponse.success(listsService.updateList( boardId, listsId, listsRequestDto)));
     }
 
     /**
@@ -59,10 +57,9 @@ public class ListsController {
      */
     @DeleteMapping("{boardId}/lists/{listsId}")
     public ResponseEntity<ApiResponse<?>> deleteList(
-            @RequestBody String email,
             @PathVariable Long boardId,
             @PathVariable Long listsId) {
-        listsService.deleteLists(email, boardId, listsId);
+        listsService.deleteLists(boardId, listsId);
         return ResponseEntity.ok(ApiResponse.success(null));
     }
 
