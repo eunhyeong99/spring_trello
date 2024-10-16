@@ -86,7 +86,7 @@ public class ListsService { /*멤버 권환 확인 해야함*/
     // 유저 이메일 검증
 //    public void isValidUserMemberRole(String email) {
 //        User user = userRepository.findByEmail(email).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-//        memberRepository.findByUserId(user.getId()).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_READ_ONLY));
+//        Member member = memberRepository.findByUserId(user.getId()).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_READ_ONLY));
 //        if (MemberRole.READONLY.equals(member.getMemberRole())) {
 //            throw new CustomException(ErrorCode.MEMBER_READ_ONLY);
 //        }

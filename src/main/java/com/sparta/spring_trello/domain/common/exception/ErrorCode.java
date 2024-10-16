@@ -29,9 +29,9 @@ public enum ErrorCode implements CodeInterface {
     USER_NOT_FOUND(404,"유저를 찾을 수 없습니다."),
     MEMBER_READ_ONLY(403,"권한이 없습니다."),
   
-    READ_ONLY_MEMBER(1002, "READ_ONLY_MEMBER"),
-    NOT_CARD_AUTHOR(1003, "NOT_CARD_AUTHOR"),
-    NOT_COMMENT_AUTHOR(1004, "NOT_COMMENT_AUTHOR");
+    READ_ONLY_MEMBER(1002, "읽기 전용 멤버입니다."),
+    NOT_CARD_AUTHOR(1003, "카드 작성자가 아닙니다."),
+    NOT_COMMENT_AUTHOR(1004, "댓글 작성자가 아닙니다.");
 
     private final Integer code;
     private final String message;

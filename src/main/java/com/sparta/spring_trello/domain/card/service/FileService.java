@@ -37,7 +37,7 @@ public class FileService {
         validateFile(file); // 파일 형식 및 크기 검증
 
         // 파일 이름 중복 방지를 위해 UUID 사용
-        String fileName = cardId + "_" + UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+        String fileName = cardId + "_" + UUID.randomUUID() + "_" + file.getOriginalFilename();
 
         // 메타데이터 설정 (파일 크기)
         ObjectMetadata metadata = new ObjectMetadata();
