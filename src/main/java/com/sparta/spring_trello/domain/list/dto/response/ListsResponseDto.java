@@ -10,7 +10,7 @@ public class ListsResponseDto {
     private final String title;
     private final Integer order;
 
-    private ListsResponseDto(Long boardId, Long id, String title, Integer order) {
+    public ListsResponseDto(Long boardId, Long id, String title, Integer order) {
         this.boardId = boardId;
         this.id = id;
         this.title = title;
