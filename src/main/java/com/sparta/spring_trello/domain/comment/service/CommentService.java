@@ -49,7 +49,7 @@ public class CommentService {
 
         // 댓글 작성자 확인
         if (!comment.getUserId().equals(authUser.getUserId())) {
-            throw new CustomException(ErrorCode.NOT_FOUND);
+            throw new CustomException(ErrorCode.NOT_COMMENT_AUTHOR);
         }
 
         // 새로운 댓글 객체 생성
@@ -62,5 +62,18 @@ public class CommentService {
                 .build();
 
         commentRepository.save(updatedComment);
+    }
+
+    // 댓글 삭제
+    public void deleteComment(Long commentId, AuthUser authUser) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 댓글을 찾을 수 없습니다."));
+
+        // 댓글 작성자 확인
+        if (!comment.getUserId().equals(authUser.getUserId())) {
+            throw new CustomException(ErrorCode.NOT_COMMENT_AUTHOR);
+        }
+
+        commentRepository.delete(comment);
     }
 }
