@@ -27,7 +27,7 @@ public enum ErrorCode implements CodeInterface {
     LISTS_NOT_FOUND(404,"리스트를 찾을 수 없습니다."),
     SUCCESS(200,"정상 처리되었습니다."),
     USER_NOT_FOUND(404,"유저를 찾을 수 없습니다."),
-    MEMBER_READ_ONLY(403,"사용 권한이 없습니다."),
+    MEMBER_READ_ONLY(403,"권한이 없습니다."),
   
     READ_ONLY_MEMBER(1002, "READ_ONLY_MEMBER"),
     NOT_CARD_AUTHOR(1003, "NOT_CARD_AUTHOR"),

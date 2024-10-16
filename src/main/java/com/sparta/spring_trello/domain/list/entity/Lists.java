@@ -1,9 +1,13 @@
 package com.sparta.spring_trello.domain.list.entity;
 
 import com.sparta.spring_trello.domain.board.entity.Board;
+import com.sparta.spring_trello.domain.card.entity.Card;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -23,8 +27,8 @@ public class Lists {
     private Board board;
 
     // 카드 연관 관계 - 리스트 삭제 시 관련 카드도 삭제됨
-//    @OneToMany(mappedBy = "lists", cascade = CascadeType.REMOVE,orphanRemoval = true)
-//    private final List<Card> card = new ArrayList<>();
+    @OneToMany(mappedBy = "lists", cascade = CascadeType.REMOVE,orphanRemoval = true)
+    private final List<Card> card = new ArrayList<>();
 
     public Lists(String title, Integer order) {
         this.title = title;
