@@ -7,10 +7,7 @@ import com.sparta.spring_trello.domain.list.dto.request.ListsRequestDto;
 import com.sparta.spring_trello.domain.list.dto.response.ListsResponseDto;
 import com.sparta.spring_trello.domain.list.entity.Lists;
 import com.sparta.spring_trello.domain.list.repository.ListsRepository;
-import com.sparta.spring_trello.domain.member.entity.Member;
-import com.sparta.spring_trello.domain.member.entity.MemberRole;
 import com.sparta.spring_trello.domain.member.repository.MemberRepository;
-import com.sparta.spring_trello.domain.user.entity.User;
 import com.sparta.spring_trello.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -31,8 +28,8 @@ public class ListsService { /*멤버 권환 확인 해야함*/
 
     // 리스트 생성
     @Transactional
-    public ListsResponseDto createList(String email, long boardId, String title) {
-        isValidUserMemberRole(email);
+    public ListsResponseDto createList( long boardId, String title) {
+//        isValidUserMemberRole(email);
         isValidBoardId(boardId); // 보드 아이디 검증
 
         int maxOrder = listsRepository.findMaxOrder().orElse(0); // 순서 초기 적용
@@ -44,8 +41,8 @@ public class ListsService { /*멤버 권환 확인 해야함*/
 
     // 리스트 수정
     @Transactional
-    public ListsResponseDto updateList(String email, Long boardId, Long listsId, ListsRequestDto listsRequestDto) {
-        isValidUserMemberRole(email);
+    public ListsResponseDto updateList(Long boardId, Long listsId, ListsRequestDto listsRequestDto) {
+//        isValidUserMemberRole(email);
         isValidBoardId(boardId); // 보드 아이디 검증
         Lists currentList = getListsById(listsId); // 리스트 아이디 검증
         Integer currentOrder = currentList.getOrder(); // 리스트 순서
@@ -71,8 +68,8 @@ public class ListsService { /*멤버 권환 확인 해야함*/
 
     // 리스트 삭제
     @Transactional
-    public void deleteLists(String email, Long boardId, Long listsId) {
-        isValidUserMemberRole(email);
+    public void deleteLists( Long boardId, Long listsId) {
+//        isValidUserMemberRole(email);
         isValidBoardId(boardId); // 보드 아이디 검증
         Lists lists = getListsById(listsId); // 리스트 아이디 검증
         Integer currentOrder = lists.getOrder(); // 리스트 순서 확인
@@ -87,13 +84,13 @@ public class ListsService { /*멤버 권환 확인 해야함*/
     }
 
     // 유저 이메일 검증
-    public void isValidUserMemberRole(String email) {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-        Member member = memberRepository.findByUserId(user.getId()).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_READ_ONLY));
-        if (MemberRole.READONLY.equals(member.getMemberRole())) {
-            throw new CustomException(ErrorCode.MEMBER_READ_ONLY);
-        }
-    }
+//    public void isValidUserMemberRole(String email) {
+//        User user = userRepository.findByEmail(email).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+//        Member member = memberRepository.findByUserId(user.getId()).orElseThrow(() -> new CustomException(ErrorCode.MEMBER_READ_ONLY));
+//        if (MemberRole.READONLY.equals(member.getMemberRole())) {
+//            throw new CustomException(ErrorCode.MEMBER_READ_ONLY);
+//        }
+//    }
 
     // 보드 아이디 검증
     public void isValidBoardId(Long boardId) {
