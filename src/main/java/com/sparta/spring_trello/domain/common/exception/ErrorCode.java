@@ -20,7 +20,11 @@ public enum ErrorCode implements CodeInterface {
     // 보드 응답 코드
     BOARD_NOT_FOUND(404,"보드를 찾을 수 없습니다."),
     LISTS_NOT_FOUND(404,"리스트를 찾을 수 없습니다."),
-    SUCCESS(200,"정상 처리되었습니다.");
+    SUCCESS(200,"정상 처리되었습니다."),
+
+    READ_ONLY_MEMBER(1002, "READ_ONLY_MEMBER"),
+    NOT_CARD_AUTHOR(1003, "NOT_CARD_AUTHOR"),
+    NOT_COMMENT_AUTHOR(1004, "NOT_COMMENT_AUTHOR");
 
     private final Integer code;
     private final String message;
