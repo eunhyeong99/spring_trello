@@ -2,18 +2,22 @@ package com.sparta.spring_trello.domain.card.service;
 
 import com.sparta.spring_trello.config.AuthUser;
 import com.sparta.spring_trello.domain.card.dto.request.CardRequestDto;
+import com.sparta.spring_trello.domain.card.dto.request.CardSearchDTO;
 import com.sparta.spring_trello.domain.card.dto.response.CardDetailResponseDto;
 import com.sparta.spring_trello.domain.card.dto.response.CardResponseDto;
 import com.sparta.spring_trello.domain.card.entity.Activity;
 import com.sparta.spring_trello.domain.card.entity.Card;
 import com.sparta.spring_trello.domain.card.repository.ActivityRepository;
 import com.sparta.spring_trello.domain.card.repository.CardRepository;
+import com.sparta.spring_trello.domain.card.repository.CardRepositoryCustom;
 import com.sparta.spring_trello.domain.comment.entity.Comment;
 import com.sparta.spring_trello.domain.comment.repository.CommentRepository;
 import com.sparta.spring_trello.domain.common.exception.CustomException;
 import com.sparta.spring_trello.domain.common.exception.ErrorCode;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +31,7 @@ public class CardService {
     private final CardRepository cardRepository;
     private final ActivityRepository activityRepository;
     private final CommentRepository commentRepository;
+    private final CardRepositoryCustom cardRepositoryCustom;
 
     // 카드 생성
     public CardResponseDto createCard(CardRequestDto cardRequest, AuthUser authUser) {
@@ -147,5 +152,10 @@ public class CardService {
         // 활동 내역 추가 (카드 삭제)
         Activity activity = new Activity(card, "카드 삭제", "카드가 삭제되었습니다.");
         activityRepository.save(activity);
+    }
+
+    // 카드 검색 기능
+    public Page<Card> searchCards(CardSearchDTO criteria, Pageable pageable) {
+        return cardRepositoryCustom.searchCards(criteria, pageable);
     }
 }
