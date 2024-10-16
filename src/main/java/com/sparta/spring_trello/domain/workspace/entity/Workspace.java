@@ -1,6 +1,6 @@
 package com.sparta.spring_trello.domain.workspace.entity;
 
-import com.sparta.spring_trello.entity.User;
+import com.sparta.spring_trello.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 

@@ -3,7 +3,7 @@ package com.sparta.spring_trello.domain.workspace.controller;
 import com.sparta.spring_trello.domain.workspace.dto.request.WorkspaceRequestDto;
 import com.sparta.spring_trello.domain.workspace.entity.Workspace;
 import com.sparta.spring_trello.domain.workspace.service.WorkspaceService;
-import com.sparta.spring_trello.entity.User;
+import com.sparta.spring_trello.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

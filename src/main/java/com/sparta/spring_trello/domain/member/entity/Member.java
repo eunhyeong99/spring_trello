@@ -2,6 +2,7 @@ package com.sparta.spring_trello.domain.member.entity;
 
 import com.sparta.spring_trello.domain.common.entity.Timestamped;
 import com.sparta.spring_trello.domain.user.entity.User;
+import com.sparta.spring_trello.domain.workspace.entity.Workspace;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,9 +26,9 @@ public class Member extends Timestamped {
     @JoinColumn(name = "user_id")
     private User user;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "workspace_id")
-//    private Workspace workspace;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "workspace_id")
+    private Workspace workspace;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "member_role")
@@ -36,11 +37,11 @@ public class Member extends Timestamped {
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
-//    public Member(User user, Workspace workspace, MemberRole memberRole) {
-//        this.user = user;
-//        this.workspace = workspace;
-//        this.memberRole = memberRole;
-//    }
+    public Member(User user, Workspace workspace, MemberRole memberRole) {
+        this.user = user;
+        this.workspace = workspace;
+        this.memberRole = memberRole;
+    }
 
     // 멤버 역할 수정
     public void update(MemberRole memberRole) {

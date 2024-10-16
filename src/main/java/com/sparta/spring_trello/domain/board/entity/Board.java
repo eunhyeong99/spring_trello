@@ -2,7 +2,7 @@ package com.sparta.spring_trello.domain.board.entity;
 
 import com.sparta.spring_trello.domain.common.entity.Timestamped;
 import com.sparta.spring_trello.domain.list.entity.Lists;
-import com.sparta.spring_trello.domain.workspace.entity.Work;
+import com.sparta.spring_trello.domain.workspace.entity.Workspace;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,7 +26,7 @@ public class Board extends Timestamped {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "workspace_id", nullable = false)
-    private Work workspace;
+    private Workspace workspace;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE, orphanRemoval = true)
     @OrderBy("order ASC")
