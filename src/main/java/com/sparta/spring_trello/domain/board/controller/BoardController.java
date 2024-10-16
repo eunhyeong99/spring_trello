@@ -1,9 +1,9 @@
 package com.sparta.spring_trello.domain.board.controller;
 
-import com.sparta.spring_trello.domain.board.dto.BoardSimpleResponseDto;
 import com.sparta.spring_trello.domain.board.dto.request.BoardRequestDto;
 import com.sparta.spring_trello.domain.board.dto.response.BoardDetailResponseDto;
 import com.sparta.spring_trello.domain.board.dto.response.BoardResponseDto;
+import com.sparta.spring_trello.domain.board.dto.response.BoardSimpleResponseDto;
 import com.sparta.spring_trello.domain.board.service.BoardService;
 import com.sparta.spring_trello.util.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -33,11 +33,12 @@ public class BoardController {
      */
     @PostMapping
     public ResponseEntity<ApiResponse<BoardResponseDto>> createBoard(
+            @RequestBody String email,
             @RequestBody BoardRequestDto boardRequestDto,
             @RequestBody(required = false) String backgroundColor,
             @RequestBody(required = false) String image
     ) {
-        return ResponseEntity.ok(ApiResponse.success(boardService.createBoard(boardRequestDto, backgroundColor, image)));
+        return ResponseEntity.ok(ApiResponse.success(boardService.createBoard(email, boardRequestDto, backgroundColor, image)));
     }
 
     /**
@@ -59,7 +60,9 @@ public class BoardController {
      * @return 특정 보드에 대한 상세 응답 DTO
      */
     @GetMapping("/{boardId}")
-    public ResponseEntity<ApiResponse<BoardDetailResponseDto>> getBoard(@RequestBody String email, @PathVariable Long boardId) {
+    public ResponseEntity<ApiResponse<BoardDetailResponseDto>> getBoard(
+            @RequestBody String email,
+            @PathVariable Long boardId) {
         return ResponseEntity.ok(ApiResponse.success(boardService.getBoard(email, boardId)));
     }
 

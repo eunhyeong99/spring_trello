@@ -1,4 +1,4 @@
-package com.sparta.spring_trello.domain.board.dto;
+package com.sparta.spring_trello.domain.board.dto.response;
 
 import com.sparta.spring_trello.domain.board.entity.Board;
 import lombok.Getter;
