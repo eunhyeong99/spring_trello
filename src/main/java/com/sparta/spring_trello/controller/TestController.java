@@ -1,7 +1,7 @@
 package com.sparta.spring_trello.controller;
 
 import com.sparta.spring_trello.config.AuthUser;
-import com.sparta.spring_trello.entity.UserRole;
+import com.sparta.spring_trello.domain.user.entity.UserRole;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
