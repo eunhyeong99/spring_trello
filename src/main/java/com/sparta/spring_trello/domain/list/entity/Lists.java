@@ -20,6 +20,7 @@ public class Lists {
     private Long id;
 
     private String title;
+    @Column(name = "order_Number")
     private Integer order;
 
     @ManyToOne(fetch = FetchType.LAZY)
