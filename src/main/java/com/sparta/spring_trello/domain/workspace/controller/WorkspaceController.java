@@ -49,7 +49,7 @@ public class WorkspaceController {
     //워크스페이스 수정
     @PutMapping("/workspaces/{workspaceId}")
     public ResponseEntity<ApiResponse<?>> updateWorkspace(
-            @PathVariable Long workspaceId,
+            @PathVariable(name = "workspaceId") Long workspaceId,
             @RequestBody @Valid WorkspaceRequestDto workspaceRequestDto,
             @AuthenticationPrincipal AuthUser authUser) {
         Workspace updatedWorkspace = workspaceService.updateWorkspace(workspaceId, workspaceRequestDto, authUser);
