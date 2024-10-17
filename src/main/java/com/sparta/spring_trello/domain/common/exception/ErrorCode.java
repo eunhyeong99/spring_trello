@@ -22,16 +22,26 @@ public enum ErrorCode implements CodeInterface {
     INTERNAL_SERVER_ERROR_UPLOAD(500, "INTERNAL_SERVER_ERROR_UPLOAD"),
     INTERNAL_SERVER_ERROR_DELETE(500, "INTERNAL_SERVER_ERROR_DELETE"),
 
-    // 보드 응답 코드
+    // 유저 에러 코드
+    USER_NOT_FOUND(404,"유저를 찾을 수 없습니다."),
+
+    // 보드, 리스트 에러 코드
     BOARD_NOT_FOUND(404,"보드를 찾을 수 없습니다."),
     LISTS_NOT_FOUND(404,"리스트를 찾을 수 없습니다."),
     SUCCESS(200,"정상 처리되었습니다."),
-    USER_NOT_FOUND(404,"유저를 찾을 수 없습니다."),
-    MEMBER_READ_ONLY(403,"권한이 없습니다."),
-  
-    READ_ONLY_MEMBER(1002, "읽기 전용 멤버입니다."),
+
+    // 카드, 댓글 에러 코드
     NOT_CARD_AUTHOR(1003, "카드 작성자가 아닙니다."),
-    NOT_COMMENT_AUTHOR(1004, "댓글 작성자가 아닙니다.");
+    NOT_COMMENT_AUTHOR(1004, "댓글 작성자가 아닙니다."),
+
+    // 멤버 에러 코드
+    DUPLICATE_MEMBER(400, "이미 등록된 멤버입니다."),
+    MEMBER_NOT_FOUND(404, "멤버를 찾을 수 없습니다."),
+    READ_ONLY_MEMBER(1002, "읽기 전용 멤버입니다."),
+    MEMBER_READ_ONLY(403,"권한이 없습니다."),
+
+    // 워크스페이스 에러 코드
+    WORKSPACE_NOT_FOUND(404,"워크스페이스를 찾을 수 없습니다");
 
     private final Integer code;
     private final String message;
