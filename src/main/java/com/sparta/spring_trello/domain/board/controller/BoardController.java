@@ -60,7 +60,7 @@ public class BoardController {
     @GetMapping("/{boardId}")
     public ResponseEntity<ApiResponse<BoardDetailResponseDto>> getBoard(
             @AuthenticationPrincipal AuthUser user,
-            @PathVariable Long boardId) {
+            @PathVariable("boardId") Long boardId) {
         return ResponseEntity.ok(ApiResponse.success(boardService.getBoard(user, boardId)));
     }
 
@@ -74,7 +74,7 @@ public class BoardController {
     @PutMapping("/{boardId}")
     public ResponseEntity<ApiResponse<BoardResponseDto>> updateBoard(
             @AuthenticationPrincipal AuthUser user,
-            @PathVariable Long boardId,
+            @PathVariable("boardId") Long boardId,
             @RequestBody BoardUpdateRequestDto RequestDto) {
         return ResponseEntity.ok(ApiResponse.success(boardService.updateBoard(user, boardId, RequestDto)));
     }
@@ -88,7 +88,7 @@ public class BoardController {
     @DeleteMapping("/{boardId}")
     public ResponseEntity<ApiResponse<?>> deleteBoard(
             @AuthenticationPrincipal AuthUser user,
-            @PathVariable Long boardId) {
+            @PathVariable("boardId") Long boardId) {
         boardService.deleteBoard(user, boardId);
         return ResponseEntity.ok(ApiResponse.success(null));
     }

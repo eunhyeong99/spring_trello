@@ -15,14 +15,14 @@ public class BoardDetailResponseDto {
 
     private final Long boardId;
     private final String title;
-    private final List<Lists> lists;
-    private final List<Card> card;
+    private final List<ListsResponseDto> lists;
+    private final List<CardResponseDto> card;
 
     public BoardDetailResponseDto(Long boardId, String title, List<ListsResponseDto> listsResponse, List<CardResponseDto> cardResponse) {
         this.boardId = boardId;
         this.title = title;
-        this.lists = new ArrayList<>();
-        this.card = new ArrayList<>();
+        this.lists = new ArrayList<>(listsResponse);
+        this.card = new ArrayList<>(cardResponse);
     }
 
     public static BoardDetailResponseDto of(Board board, List<Lists> lists, List<Card> card) {

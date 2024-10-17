@@ -1,6 +1,5 @@
 package com.sparta.spring_trello.domain.list.repository;
 
-import com.sparta.spring_trello.domain.board.entity.Board;
 import com.sparta.spring_trello.domain.list.entity.Lists;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -21,5 +20,5 @@ public interface ListsRepository extends JpaRepository<Lists, Long> {
     List<Lists> findAllByIdAndOrderGreaterThan(Long listsId, Integer order);
 
     // 보드 아이디로 찾기
-    List<Lists> findAllByBoard(Board board);
+    List<Lists> findByBoardId(Long id);
 }
