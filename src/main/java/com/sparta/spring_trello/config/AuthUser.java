@@ -15,17 +15,12 @@ public class AuthUser {
     private final Long userId;
     private final String email;
     private final Collection<? extends GrantedAuthority> authorities;
-    private final MemberRole role;
+    private final UserRole userRole;
 
-    public AuthUser(Long userId, String email, MemberRole role) {
+    public AuthUser(Long userId, String email, UserRole userRole) {
         this.userId = userId;
         this.email = email;
-        this.role = role;
-        this.authorities = List.of(new SimpleGrantedAuthority(role.name()));
-    }
-
-    // 사용자가 읽기 전용 역할을 가지고 있는지 확인하는 메서드
-    public boolean isReadOnly() {
-        return this.role == MemberRole.READONLY;
+        this.userRole = userRole;
+        this.authorities = List.of(new SimpleGrantedAuthority(userRole.name()));
     }
 }

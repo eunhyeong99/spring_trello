@@ -18,6 +18,9 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,10 +39,7 @@ public class CardService {
     // 카드 생성
     public CardResponseDto createCard(AuthUser authUser, CardRequestDto cardRequest) {
 
-        // 읽기 전용 권한 확인
-        if (authUser.isReadOnly()) {
-            throw new CustomException(ErrorCode.READ_ONLY_MEMBER);
-        }
+        checkPermission(); // 권한 확인
 
         // 카드 생성 시 작성자 ID 설정
         Card card = Card.builder()
@@ -76,10 +76,7 @@ public class CardService {
             throw new CustomException(ErrorCode.NOT_CARD_AUTHOR);
         }
 
-        // 읽기 전용 권한 확인
-        if (authUser.isReadOnly()) {
-            throw new CustomException(ErrorCode.READ_ONLY_MEMBER);
-        }
+        checkPermission(); // 권한 확인
 
         // 카드 수정
         card.updateCard(
@@ -141,10 +138,7 @@ public class CardService {
             throw new CustomException(ErrorCode.NOT_CARD_AUTHOR);
         }
 
-        // 읽기 전용 권한 확인
-        if (authUser.isReadOnly()) {
-            throw new CustomException(ErrorCode.READ_ONLY_MEMBER);
-        }
+        checkPermission(); // 권한 확인
 
         // 카드 삭제
         cardRepository.delete(card);
@@ -157,5 +151,17 @@ public class CardService {
     // 카드 검색 기능
     public Page<Card> searchCards(CardSearchDTO criteria, Pageable pageable) {
         return cardRepositoryCustom.searchCards(criteria, pageable);
+    }
+
+    // 권한 확인 메서드
+    private void checkPermission() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        boolean isReadOnly = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .anyMatch(a -> a.equals("READONLY"));
+
+        if (isReadOnly) {
+            throw new CustomException(ErrorCode.READ_ONLY_USER_ERROR, "읽기 전용 사용자는 카드를 생성/삭제를 할 수 없습니다.");
+        }
     }
 }

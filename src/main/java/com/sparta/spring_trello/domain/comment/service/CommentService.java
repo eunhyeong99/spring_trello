@@ -10,6 +10,9 @@ import com.sparta.spring_trello.domain.common.exception.CustomException;
 import com.sparta.spring_trello.domain.common.exception.ErrorCode;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,10 +29,7 @@ public class CommentService {
         Card card = cardRepository.findById(cardId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 카드를 찾을 수 없습니다."));
 
-        // 읽기 전용 권한 확인
-        if (authUser.isReadOnly()) {
-            throw new CustomException(ErrorCode.READ_ONLY_MEMBER);
-        }
+        checkPermission(); // 권한 확인
 
         // 댓글 생성
         Comment comment = Comment.builder()
@@ -75,5 +75,17 @@ public class CommentService {
         }
 
         commentRepository.delete(comment);
+    }
+
+    // 권한 확인 메서드
+    private void checkPermission() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        boolean isReadOnly = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .anyMatch(a -> a.equals("READONLY"));
+
+        if (isReadOnly) {
+            throw new CustomException(ErrorCode.READ_ONLY_USER_ERROR, "읽기 전용 사용자는 댓글을 작성 할 수 없습니다.");
+        }
     }
 }
