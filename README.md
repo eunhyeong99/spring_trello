@@ -30,7 +30,7 @@
 ![카드.png](img%2F%EC%B9%B4%EB%93%9C.png)
 
 ## ♻️ERD
-![ERD.png](img%2FERD.png)
+![ERD2.png](img%2FERD2.png)
 
 ## 🗒️API 명세서
 ### 회원 가입/로그인
