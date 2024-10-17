@@ -8,14 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class WorkspaceRequestDto {
-
-    @NotNull
     private Long workspaceId;
-
-    @NotNull
     private String title;
-
-    @NotNull
     private String description;
-
 }
