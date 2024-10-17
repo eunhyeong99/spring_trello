@@ -1,11 +1,11 @@
 package com.sparta.spring_trello.domain.workspace.entity;
 
-import com.sparta.spring_trello.domain.user.entity.User;
+import com.sparta.spring_trello.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
 
-import javax.management.relation.Role;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -18,7 +18,7 @@ import java.util.*;
 public class Workspace {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long workspaceId;
+    private Long id;
 
     @Column
     private String email;
@@ -29,25 +29,13 @@ public class Workspace {
     @Column
     private String description;
 
-    @ManyToMany
-    @JoinTable(
-            name = "workspace_user",
-            joinColumns = @JoinColumn(name = "workspace_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-    private List<User> members = new ArrayList<>();
-
-    // 워크스페이스에서 멤버별 역할을 지정하는 필드 추가
-    @ElementCollection
-    @CollectionTable(name = "workspaces", joinColumns = @JoinColumn(name = "workspace_id"))
-    @MapKeyJoinColumn(name = "user_id")
-    @Column(name = "role")
-    private Map<User, Role> memberRoles = new HashMap<>();
+    @OneToMany(mappedBy = "workspace",cascade = CascadeType.ALL,orphanRemoval = true)
+    private List<Member> members = new ArrayList<>();
 
 
-    public Workspace(Long workspaceId, String title, String description) {
-        this.workspaceId = workspaceId;
+    public Workspace(String title, String email) {
         this.title = title;
-        this.description = description;
+        this.email = email;
     }
+
 }

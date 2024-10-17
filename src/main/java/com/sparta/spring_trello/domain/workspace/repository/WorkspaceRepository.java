@@ -1,7 +1,7 @@
 package com.sparta.spring_trello.domain.workspace.repository;
 
-import com.sparta.spring_trello.domain.workspace.entity.Workspace;
 import com.sparta.spring_trello.domain.user.entity.User;
+import com.sparta.spring_trello.domain.workspace.entity.Workspace;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,8 +12,7 @@ import java.util.List;
 public interface WorkspaceRepository extends JpaRepository<Workspace, Long> {
     List<Workspace> findMembersByEmail(String email);
 
-    List<Workspace> findById(String title);
-
-    @Query("SELECT w FROM Workspace w JOIN FETCH w.members WHERE w.workspaceId = :workspaceId")
+    @Query("SELECT m FROM Workspace w JOIN w.members m WHERE w.id = :workspaceId")
     List<User> findMembersByWorkspaceId(@Param("workspaceId") Long workspaceId);
+
 }

@@ -1,9 +1,12 @@
 package com.sparta.spring_trello.domain.workspace.controller;
 
+import com.sparta.spring_trello.config.AuthUser;
+import com.sparta.spring_trello.domain.user.entity.User;
 import com.sparta.spring_trello.domain.workspace.dto.request.WorkspaceRequestDto;
 import com.sparta.spring_trello.domain.workspace.entity.Workspace;
 import com.sparta.spring_trello.domain.workspace.service.WorkspaceService;
-import com.sparta.spring_trello.domain.user.entity.User;
+import com.sparta.spring_trello.util.ApiResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,47 +26,45 @@ public class WorkspaceController {
 
     //워크스페이스 생성
     @PostMapping("/workspaces")
-    public ResponseEntity<Workspace> createWorkspace(@RequestBody WorkspaceRequestDto workspaceDto, @AuthenticationPrincipal User user) {
+    public ResponseEntity<ApiResponse<?>> createWorkspace(
+            @RequestBody @Valid WorkspaceRequestDto workspaceDto,
+            @AuthenticationPrincipal AuthUser authUser) {
+
         // createWorkspace 메서드가 Workspace 객체를 반환하도록 해야 함
-        Workspace workspace = workspaceService.createWorkspace(workspaceDto.getTitle(), workspaceDto.getDescription(), user);
-        return new ResponseEntity<>(workspace, HttpStatus.CREATED);
+        Workspace workspace = workspaceService.createWorkspace(workspaceDto, authUser);
+
+        // ApiResponse 객체를 사용하여 응답을 생성합니다.
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(workspace));
     }
 
 
     //워크스페이스 조회
     @GetMapping("/workspaces/{workspaceId}")
-    public ResponseEntity<Workspace> getWorkspaceById(@PathVariable Long workspaceId) {
+    public ResponseEntity<ApiResponse<?>> getWorkspaceById(@PathVariable(name = "workspaceId") Long workspaceId) {
         Workspace workspace = workspaceService.getWorkspaceById(workspaceId);
-        return new ResponseEntity<>(workspace, HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(workspace));
     }
 
 
     //워크스페이스 수정
     @PutMapping("/workspaces/{workspaceId}")
-    public ResponseEntity<Workspace> updateWorkspace(@PathVariable Long workspaceId, @RequestBody WorkspaceRequestDto workspaceRequestDto, @PathVariable User user) {
-        Workspace updatedWorkspace = workspaceService.updateWorkspace(workspaceId, workspaceRequestDto.getTitle(), workspaceRequestDto.getDescription(), user);
-        return new ResponseEntity<>(updatedWorkspace, HttpStatus.OK);
+    public ResponseEntity<ApiResponse<?>> updateWorkspace(
+            @PathVariable Long workspaceId,
+            @RequestBody @Valid WorkspaceRequestDto workspaceRequestDto,
+            @AuthenticationPrincipal AuthUser authUser) {
+        Workspace updatedWorkspace = workspaceService.updateWorkspace(workspaceId, workspaceRequestDto, authUser);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(updatedWorkspace));
     }
 
 
     //워크스페이스 삭제
     @DeleteMapping("/workspaces/{workspaceId}")
-    public ResponseEntity<Void> deleteWorkspace(@PathVariable Long workspaceId, @AuthenticationPrincipal User user) {
-        workspaceService.deleteWorkspace(workspaceId, user);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    public ResponseEntity<ApiResponse<?>> deleteWorkspace(
+            @PathVariable(name = "workspaceId") Long workspaceId,
+            @AuthenticationPrincipal AuthUser authUser) {
+
+        workspaceService.deleteWorkspace(workspaceId,authUser);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(null));
     }
 
-    // 워크스페이스 ID로 특정 유저 이메일로 유저 조회
-    @GetMapping("/{workspaceid}/members/email")
-    public ResponseEntity<User> getUserByEmail(@PathVariable Long id, @RequestParam String email) {
-        User user = workspaceService.getUserByEmail(id, email);
-        return new ResponseEntity<>(user, HttpStatus.OK);
-    }
-
-    // 워크스페이스 ID로 모든 멤버 조회
-    @GetMapping("/{workspaceid}/members")
-    public ResponseEntity<List<User>> getMembersByWorkspaceId(@PathVariable Long id) {
-        List<User> members = workspaceService.getMembersByWorkspaceId(id);
-        return new ResponseEntity<>(members, HttpStatus.OK);
-    }
 }
