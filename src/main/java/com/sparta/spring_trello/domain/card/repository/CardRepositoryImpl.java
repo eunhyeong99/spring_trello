@@ -42,6 +42,11 @@ public class CardRepositoryImpl implements CardRepositoryCustom {
             builder.and(qCard.board.id.eq(criteria.getBoardId()));
         }
 
+        // 페이징 없이 전체 결과 조회 (4번)
+        List<Card> allCards = queryFactory.selectFrom(qCard)
+                .where(builder)
+                .fetch();
+
         // 결과 리스트 가져오기
         List<Card> cards = queryFactory.selectFrom(qCard)
                 .where(builder)
