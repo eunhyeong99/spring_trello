@@ -14,12 +14,14 @@ public class User {
     private Long id;
     @Column(nullable = false, unique = true)
     private String email;
-
+    @Column(nullable = false)
+    private String password;
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
 
-    public User(String email, UserRole userRole) {
+    public User(String email, String encodedPassword, UserRole userRole) {
         this.email = email;
+        this.password = encodedPassword;
         this.userRole = userRole;
     }
 }
