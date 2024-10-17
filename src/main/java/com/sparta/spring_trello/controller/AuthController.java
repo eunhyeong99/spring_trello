@@ -1,5 +1,6 @@
 package com.sparta.spring_trello.controller;
 
+import com.sparta.spring_trello.domain.notification.service.DiscordNotificationService;
 import com.sparta.spring_trello.domain.user.dto.DeleteRequestDto;
 import com.sparta.spring_trello.domain.user.dto.SigninRequest;
 import com.sparta.spring_trello.domain.user.dto.SignupRequest;
@@ -13,10 +14,20 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthService authService;
+    private final DiscordNotificationService discordNotificationService;
 
     @PostMapping("/auth/signup")
     public ResponseEntity<Void> signup(@RequestBody SignupRequest signupRequest) {
         String bearerToken = authService.signup(signupRequest);
+
+        // 회원가입 이벤트에 대해 디스코드 알림 전송
+        String messageContent = String.format(
+                "- **New User Signed Up**\n- **Username**: %s\n- **Email**: %s",
+                signupRequest.getEmail(),
+                signupRequest.getEmail()
+        );
+        discordNotificationService.sendDiscordNotification("User Signup", messageContent);
+
         return ResponseEntity.ok().header("Authorization", bearerToken).build();
     }
 
