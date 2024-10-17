@@ -20,7 +20,7 @@ public class CommentController {
     // 댓글 작성
     @PostMapping
     public ResponseEntity<ApiResponse<?>> createComment(
-            @PathVariable Long cardId,
+            @PathVariable("cardId") Long cardId,
             @RequestBody CommentRequestDto commentRequest,
             @AuthenticationPrincipal AuthUser authUser) {
         commentService.createComment(cardId, commentRequest, authUser);
@@ -30,8 +30,8 @@ public class CommentController {
     // 댓글 수정
     @PutMapping("/{commentId}")
     public ResponseEntity<ApiResponse<?>> updateComment(
-            @PathVariable Long commentId,
-            @PathVariable Long cardId,
+            @PathVariable("commentId") Long commentId,
+            @PathVariable("cardId") Long cardId,
             @RequestBody CommentRequestDto commentRequest,
             @AuthenticationPrincipal AuthUser authUser) {
         commentService.updateComment(commentId, commentRequest, authUser);
@@ -41,8 +41,8 @@ public class CommentController {
     // 댓글 삭제
     @DeleteMapping("/{commentId}")
     public ResponseEntity<ApiResponse<?>> deleteComment(
-            @PathVariable Long commentId,
-            @PathVariable Long cardId,
+            @PathVariable("commentId") Long commentId,
+            @PathVariable("cardId") Long cardId,
             @AuthenticationPrincipal AuthUser authUser) {
         commentService.deleteComment(commentId, authUser);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ApiResponse.success("댓글이 삭제되었습니다."));
