@@ -34,12 +34,22 @@
 
 ## 🗒️API 명세서
 ### 회원 가입/로그인
+![유저관련api.jpg](img%2F%EC%9C%A0%EC%A0%80%EA%B4%80%EB%A0%A8api.jpg)
 ### 멤버
+![유저관련api.jpg](img%2F%EC%9C%A0%EC%A0%80%EA%B4%80%EB%A0%A8api.jpg)
 ### 워크스페이스
+![워크스페이스api.jpg](img%2F%EC%9B%8C%ED%81%AC%EC%8A%A4%ED%8E%98%EC%9D%B4%EC%8A%A4api.jpg)
 ### 보드
+![보드api.jpg](img%2F%EB%B3%B4%EB%93%9Capi.jpg)
+![보드2api.jpg](img%2F%EB%B3%B4%EB%93%9C2api.jpg)
 ### 리스트
+![리스트api.jpg](img%2F%EB%A6%AC%EC%8A%A4%ED%8A%B8api.jpg)
 ### 카드
+![카드api.jpg](img%2F%EC%B9%B4%EB%93%9Capi.jpg)
+![카드2api.jpg](img%2F%EC%B9%B4%EB%93%9C2api.jpg)
+![카드3api.jpg](img%2F%EC%B9%B4%EB%93%9C3api.jpg)
 ### 댓글
-### 
+![댓글api.jpg](img%2F%EB%8C%93%EA%B8%80api.jpg)
+
 
 
