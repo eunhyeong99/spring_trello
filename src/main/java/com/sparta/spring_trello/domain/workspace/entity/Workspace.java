@@ -20,9 +20,6 @@ public class Workspace {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
-    private String email;
-
     @Column(length = 45)
     private String title;
 
@@ -33,9 +30,8 @@ public class Workspace {
     private List<Member> members = new ArrayList<>();
 
 
-    public Workspace(String title, String email) {
+    public Workspace(String title,String description) {
         this.title = title;
-        this.email = email;
+        this.description = description;
     }
-
 }

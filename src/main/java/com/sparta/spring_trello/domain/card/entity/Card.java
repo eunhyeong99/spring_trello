@@ -1,5 +1,6 @@
 package com.sparta.spring_trello.domain.card.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sparta.spring_trello.domain.board.entity.Board;
 import com.sparta.spring_trello.domain.comment.entity.Comment;
 import com.sparta.spring_trello.domain.common.entity.Timestamped;
@@ -28,13 +29,14 @@ public class Card extends Timestamped {
     private LocalDate deadline;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinColumn(name = "board_id")
     private Board board;
 
-    @OneToMany(mappedBy = "card", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "card", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Activity> activities;  // 활동 내역
 
-    @OneToMany(mappedBy = "card", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "card", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;     // 댓글
 
     @Column(name = "user_id", nullable = false) // 작성자 ID 추가
