@@ -32,15 +32,16 @@ public class Board extends Timestamped {
     @OrderBy("order ASC")
     private final List<Lists> lists = new ArrayList<>();
 
-    public Board(String title, String backgroundColor, String image) {
+    public Board(Workspace workspace, String title, String backgroundColor, String image) {
+        this.workspace = workspace;
         this.title = title;
         this.backgroundColor = backgroundColor;
         this.image = image;
     }
 
     // 리스트 수정
-    public void updateBoard(String title, String backgroundColor, String image) {
-        new Board(title, backgroundColor, image);
+    public void updateBoard(Workspace workspace, String title, String backgroundColor, String image) {
+        new Board(workspace,title, backgroundColor, image);
     }
 
 }
