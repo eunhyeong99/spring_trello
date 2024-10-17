@@ -29,6 +29,7 @@ public enum ErrorCode implements CodeInterface {
     BOARD_NOT_FOUND(404,"보드를 찾을 수 없습니다."),
     LISTS_NOT_FOUND(404,"리스트를 찾을 수 없습니다."),
     SUCCESS(200,"정상 처리되었습니다."),
+    BOARD_NON_BACK_GROUD(404,"배경색 또는 이미지는 반드시 입력해야 합니다."),
 
     // 카드, 댓글 에러 코드
     NOT_CARD_AUTHOR(1003, "카드 작성자가 아닙니다."),

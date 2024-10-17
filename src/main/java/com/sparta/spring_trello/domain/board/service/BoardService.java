@@ -11,6 +11,7 @@ import com.sparta.spring_trello.domain.card.entity.Card;
 import com.sparta.spring_trello.domain.card.repository.CardRepository;
 import com.sparta.spring_trello.domain.common.exception.CustomException;
 import com.sparta.spring_trello.domain.common.exception.ErrorCode;
+import com.sparta.spring_trello.domain.list.dto.request.BoardUpdateRequestDto;
 import com.sparta.spring_trello.domain.list.entity.Lists;
 import com.sparta.spring_trello.domain.list.repository.ListsRepository;
 import com.sparta.spring_trello.domain.member.entity.Member;
@@ -39,14 +40,22 @@ public class BoardService {
 
     // 보드 생성
     @Transactional
-    public BoardResponseDto createBoard(AuthUser user, BoardRequestDto boardRequestDto, String backgroundColor, String image) {
+    public BoardResponseDto createBoard(AuthUser user, BoardRequestDto boardRequestDto) {
         isValidUserMemberRole(user);
         Workspace workspace = isValidWorkspace(boardRequestDto.getWorkspaceId());
+        User users = isValidUser(user.getUserId());
+
+        // 배경색과 이미지 중 하나는 반드시 존재해야 함
+        if ((boardRequestDto.getBackgroundColor() == null || boardRequestDto.getBackgroundColor().isEmpty()) &&
+                (boardRequestDto.getImage() == null || boardRequestDto.getImage().isEmpty())) {
+            throw  new CustomException(ErrorCode.BOARD_NON_BACK_GROUD);
+        }
         Board newboard = new Board(
                 workspace,
+                users,
                 boardRequestDto.getTitle(),
-                backgroundColor,
-                image);
+                boardRequestDto.getBackgroundColor(),
+                boardRequestDto.getImage());
         Board savedBoard = boardRepository.save(newboard);
         return BoardResponseDto.from(savedBoard);
     }
@@ -54,7 +63,8 @@ public class BoardService {
     // 본인의 모든 워크스페이스 내 보드들 조회
     public List<BoardSimpleResponseDto> getBoards(AuthUser user) {
         isValidUserMemberRole(user);
-        return boardRepository.findById(user.getUserId())
+       User users =  isValidUser(user.getUserId());
+        return boardRepository.findByUserId(users.getId())
                 .stream()
                 .map(BoardSimpleResponseDto::from)
                 .toList();
@@ -63,9 +73,10 @@ public class BoardService {
     // 보드 단건 조회
     public BoardDetailResponseDto getBoard(AuthUser user, Long id) {
         isValidUserMemberRole(user);
+        isValidUser(user.getUserId());
         Board board = isValidBoard(id);
-        List<Lists> lists = listsRepository.findAllByBoard(board);
-        List<Card> card = cardRepository.findByBoardId(board.getId());
+        List<Lists> lists = listsRepository.findByBoardId(id);
+        List<Card> card = cardRepository.findByBoardId(id);
         return BoardDetailResponseDto.of(board, lists, card);
     }
 
@@ -74,16 +85,18 @@ public class BoardService {
     public void deleteBoard(AuthUser user, Long boardId) {
         isValidUserMemberRole(user);
         isValidBoard(boardId);
+        isValidUser(user.getUserId());
         boardRepository.deleteById(boardId);
     }
 
     // 보드 수정
     @Transactional
-    public BoardResponseDto updateBoard(AuthUser user, Long boardId, String title, String backgroundColor, String image) {
+    public BoardResponseDto updateBoard(AuthUser user, Long boardId, BoardUpdateRequestDto requestDto) {
         isValidUserMemberRole(user);
+        User users = isValidUser(user.getUserId());
         Board board = isValidBoard(boardId);
         Workspace workspace = board.getWorkspace();
-        board.updateBoard(workspace, title, backgroundColor, image);
+        board.updateBoard(workspace,users,requestDto.getTitle(),requestDto.getBackgroundColor(),requestDto.getImage());
         Board savedBoard = boardRepository.save(board);
         return BoardResponseDto.from(savedBoard);
     }
@@ -103,6 +116,12 @@ public class BoardService {
     public Board isValidBoard(Long boardId) throws CustomException {
         Board board = boardRepository.findById(boardId).orElseThrow(() -> new CustomException(ErrorCode.BOARD_NOT_FOUND));
         return board;
+    }
+
+    // 유효한 유저 인지 확인
+    public User isValidUser(Long userId) throws CustomException {
+        User user = userRepository.findById(userId).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        return user;
     }
 
     // 유효한 워크스페이스 인지 확인
