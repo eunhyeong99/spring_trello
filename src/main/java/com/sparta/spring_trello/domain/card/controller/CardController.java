@@ -46,7 +46,7 @@ public class CardController {
     @PutMapping("/{cardId}")
     public ResponseEntity<ApiResponse<?>> updateCard(
             @AuthenticationPrincipal AuthUser authUser,
-            @PathVariable Long cardId,
+            @PathVariable(name ="cardId") Long cardId,
             @RequestBody CardRequestDto cardRequest) {
         cardService.updateCard(authUser, cardId, cardRequest);
         return ResponseEntity.ok(ApiResponse.success("카드가 수정되었습니다."));
@@ -57,7 +57,7 @@ public class CardController {
      * @param cardId 조회할 카드 ID
      */
     @GetMapping("/{cardId}")
-    public ResponseEntity<ApiResponse<CardDetailResponseDto>> getCardDetails(@PathVariable Long cardId) {
+    public ResponseEntity<ApiResponse<CardDetailResponseDto>> getCardDetails(@PathVariable("cardId")Long cardId) {
         CardDetailResponseDto cardDetails = cardService.getCardDetails(cardId);
         return ResponseEntity.ok(ApiResponse.success(cardDetails));
     }
@@ -71,7 +71,7 @@ public class CardController {
     @DeleteMapping("/{cardId}")
     public ResponseEntity<ApiResponse<?>> deleteCard(
             @AuthenticationPrincipal AuthUser authUser,
-            @PathVariable Long cardId) {
+            @PathVariable("cardId") Long cardId) {
         cardService.deleteCard(authUser, cardId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ApiResponse.success("카드가 삭제되었습니다."));
     }
