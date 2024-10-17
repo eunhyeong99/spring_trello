@@ -36,6 +36,7 @@ public class ListsService { /*멤버 권환 확인 해야함*/
     @Transactional
     public ListsResponseDto createList(AuthUser user, long boardId, ListsCreateRequestDto requestDto) {
         isValidUserMemberRole(user);
+        isValidUser(user.getUserId());
         Board board = isValidBoardId(boardId); // 보드 아이디 검증
 
         int maxOrder = listsRepository.findMaxOrder().orElse(0); // 순서 초기 적용
@@ -49,6 +50,7 @@ public class ListsService { /*멤버 권환 확인 해야함*/
     @Transactional
     public ListsResponseDto updateList(AuthUser user, Long boardId, Long listsId, ListsRequestDto listsRequestDto) {
         isValidUserMemberRole(user);
+        isValidUser(user.getUserId());
         Board board = isValidBoardId(boardId); // 보드 아이디 검증
         Lists currentList = getListsById(listsId); // 리스트 아이디 검증
         Integer currentOrder = currentList.getOrder(); // 리스트 순서
@@ -57,25 +59,26 @@ public class ListsService { /*멤버 권환 확인 해야함*/
 
         if (!Objects.equals(listsRequestDto.getOrder(), currentOrder)) {
             if (currentOrder > listsRequestDto.getOrder()) { // 순서가 바꾸려는 순서보다 크면 해당 순서로 변경 후 다른 순서들은 1씩 줄임
-                listsRepository.findAllByOrderBetween(currentOrder + 1, listsRequestDto
+                listsRepository.findAllByOrderBetween(currentOrder - 1, listsRequestDto
                                 .getOrder())
-                        .forEach(l -> l.updateLists(board, listsRequestDto.getTitle(), l.getOrder() - 1));
+                        .forEach(l -> l.updateLists(board, listsRequestDto.getTitle(), l.getOrder() + 1));
                 currentList.updateLists(board, listsRequestDto.getTitle(), listsRequestDto.getOrder());
             } else {
                 listsRepository.findAllByOrderBetween(currentOrder + 1, listsRequestDto // 순서가 바꾸려는 순서보다 작으면 해당 순서로 변경 후 다른 순서들은 1씩 더함
                                 .getOrder())
-                        .forEach(l -> l.updateLists(board, listsRequestDto.getTitle(), l.getOrder() + 1));
+                        .forEach(l -> l.updateLists(board, listsRequestDto.getTitle(), l.getOrder() - 1));
                 currentList.updateLists(board, listsRequestDto.getTitle(), listsRequestDto.getOrder());
             }
         }
-        listsRepository.save(currentList);
-        return ListsResponseDto.from(currentList);
+        ;
+        return ListsResponseDto.from(listsRepository.save(currentList));
     }
 
     // 리스트 삭제
     @Transactional
     public void deleteLists(AuthUser user, Long boardId, Long listsId) {
         isValidUserMemberRole(user);
+        isValidUser(user.getUserId());
         Board board = isValidBoardId(boardId); // 보드 아이디 검증
         Lists lists = getListsById(listsId); // 리스트 아이디 검증
         Integer currentOrder = lists.getOrder(); // 리스트 순서 확인
@@ -108,6 +111,12 @@ public class ListsService { /*멤버 권환 확인 해야함*/
     public Lists getListsById(Long listsId) {
         return listsRepository.findById(listsId).orElseThrow(() ->
                 new CustomException(ErrorCode.LISTS_NOT_FOUND));
+    }
+
+    // 유효한 유저 인지 확인
+    public User isValidUser(Long userId) throws CustomException {
+        User user = userRepository.findById(userId).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        return user;
     }
 
 }

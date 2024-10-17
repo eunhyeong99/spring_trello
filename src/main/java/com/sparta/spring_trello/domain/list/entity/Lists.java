@@ -40,7 +40,9 @@ public class Lists {
 
     // 리스트 수정
     public void updateLists(Board board,String title, Integer order) {
-        new Lists(board,title, order);
+        this.board = board;
+        this.title = title;
+        this.order = order;
     }
 
 }
