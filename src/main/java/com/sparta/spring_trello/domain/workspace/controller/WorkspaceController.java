@@ -1,7 +1,6 @@
 package com.sparta.spring_trello.domain.workspace.controller;
 
 import com.sparta.spring_trello.config.AuthUser;
-import com.sparta.spring_trello.domain.user.entity.User;
 import com.sparta.spring_trello.domain.workspace.dto.request.WorkspaceRequestDto;
 import com.sparta.spring_trello.domain.workspace.entity.Workspace;
 import com.sparta.spring_trello.domain.workspace.service.WorkspaceService;
@@ -13,8 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Slf4j
 @RequestMapping("/api")

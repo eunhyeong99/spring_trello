@@ -1,5 +1,6 @@
 package com.sparta.spring_trello.domain.card.service;
 
+import com.querydsl.core.BooleanBuilder;
 import com.sparta.spring_trello.config.AuthUser;
 import com.sparta.spring_trello.domain.card.dto.request.CardRequestDto;
 import com.sparta.spring_trello.domain.card.dto.request.CardSearchDTO;
@@ -7,6 +8,7 @@ import com.sparta.spring_trello.domain.card.dto.response.CardDetailResponseDto;
 import com.sparta.spring_trello.domain.card.dto.response.CardResponseDto;
 import com.sparta.spring_trello.domain.card.entity.Activity;
 import com.sparta.spring_trello.domain.card.entity.Card;
+import com.sparta.spring_trello.domain.card.entity.QCard;
 import com.sparta.spring_trello.domain.card.repository.ActivityRepository;
 import com.sparta.spring_trello.domain.card.repository.CardRepository;
 import com.sparta.spring_trello.domain.card.repository.CardRepositoryCustom;
@@ -152,8 +154,13 @@ public class CardService {
     }
 
     // 카드 검색 기능
-    public Page<Card> searchCards(CardSearchDTO criteria, Pageable pageable) {
-        return cardRepositoryCustom.searchCards(criteria, pageable);
+    public Page<CardResponseDto> searchCards(CardSearchDTO criteria, Pageable pageable) {
+        System.out.println("검색 조건 (contents): " + criteria.getContents()); // 검색 조건 출력
+
+        Page<Card> cardPage = cardRepositoryCustom.searchCards(criteria, pageable);
+
+        // Page<Card>를 Page<CardResponseDto>로 변환
+        return cardPage.map(CardResponseDto::new);
     }
 
     // 권한 확인 메서드
