@@ -9,13 +9,12 @@ import lombok.Setter;
 @Setter
 public class WorkspaceRequestDto {
 
-    @NotNull
     private Long workspaceId;
 
-    @NotNull
+
     private String title;
 
-    @NotNull
+
     private String description;
 
 }

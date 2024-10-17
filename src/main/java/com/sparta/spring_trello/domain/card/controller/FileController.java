@@ -24,7 +24,7 @@ public class FileController {
      */
     @PostMapping
     public ResponseEntity<ApiResponse<?>> addAttachment(
-            @PathVariable Long cardId,
+            @PathVariable("cardId") Long cardId,
             @RequestParam("file") MultipartFile file
     ) throws IOException {
         String uploadedUrl = fileService.uploadFile(file, cardId);
@@ -38,7 +38,7 @@ public class FileController {
      */
     @GetMapping
     public ResponseEntity<ApiResponse<List<?>>> getAttachmentsByCardId(
-            @PathVariable Long cardId
+            @PathVariable("cardId") Long cardId
     ) {
         List<String> files = fileService.listFilesByCardId(cardId);
         return ResponseEntity.ok(ApiResponse.success(files));
@@ -52,8 +52,8 @@ public class FileController {
      */
     @DeleteMapping("/{attachmentId}")
     public ResponseEntity<ApiResponse<Void>> deleteAttachment(
-            @PathVariable Long cardId,
-            @PathVariable String attachmentId
+            @PathVariable("cardId") Long cardId,
+            @PathVariable("attachmentId") String attachmentId
     ) {
         fileService.deleteFile(cardId, attachmentId);
         return ResponseEntity.ok().build();
