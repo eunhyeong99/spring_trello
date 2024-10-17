@@ -14,6 +14,7 @@ import com.sparta.spring_trello.domain.comment.entity.Comment;
 import com.sparta.spring_trello.domain.comment.repository.CommentRepository;
 import com.sparta.spring_trello.domain.common.exception.CustomException;
 import com.sparta.spring_trello.domain.common.exception.ErrorCode;
+import com.sparta.spring_trello.domain.list.repository.ListsRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -35,11 +36,16 @@ public class CardService {
     private final ActivityRepository activityRepository;
     private final CommentRepository commentRepository;
     private final CardRepositoryCustom cardRepositoryCustom;
+    private final ListsRepository listsRepository;
 
     // 카드 생성
     public CardResponseDto createCard(AuthUser authUser, CardRequestDto cardRequest) {
 
         checkPermission(); // 권한 확인
+
+        // 리스트 ID로 리스트를 조회
+        var list = listsRepository.findById(cardRequest.getListId())
+                .orElseThrow(() -> new EntityNotFoundException("해당 리스트를 찾을 수 없습니다."));
 
         // 카드 생성 시 작성자 ID 설정
         Card card = Card.builder()
@@ -47,6 +53,7 @@ public class CardService {
                 .contents(cardRequest.getContents())
                 .deadline(cardRequest.getDeadline())
                 .userId(authUser.getUserId())
+                .lists(list)
                 .build();
 
         Card savedCard = cardRepository.save(card);
@@ -142,10 +149,6 @@ public class CardService {
 
         // 카드 삭제
         cardRepository.delete(card);
-
-        // 활동 내역 추가 (카드 삭제)
-        Activity activity = new Activity(card, "카드 삭제", "카드가 삭제되었습니다.");
-        activityRepository.save(activity);
     }
 
     // 카드 검색 기능

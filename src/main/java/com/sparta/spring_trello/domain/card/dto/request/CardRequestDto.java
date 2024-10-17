@@ -16,4 +16,5 @@ public class CardRequestDto {
     private String title;
     private String contents;
     private LocalDate deadline;
+    private Long listId;
 }
