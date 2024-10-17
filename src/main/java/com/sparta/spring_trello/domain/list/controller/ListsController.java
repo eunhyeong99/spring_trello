@@ -1,11 +1,14 @@
 package com.sparta.spring_trello.domain.list.controller;
 
+import com.sparta.spring_trello.config.AuthUser;
+import com.sparta.spring_trello.domain.list.dto.request.ListsCreateRequestDto;
 import com.sparta.spring_trello.domain.list.dto.request.ListsRequestDto;
 import com.sparta.spring_trello.domain.list.dto.response.ListsResponseDto;
 import com.sparta.spring_trello.domain.list.service.ListsService;
 import com.sparta.spring_trello.util.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 /* 리스트 관련 API 요청을 처리하는 컨트롤러.
@@ -16,20 +19,21 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/boards")
 public class ListsController {
 
-    private ListsService listsService;
+    private final ListsService listsService;
 
     /**
      * 특정 보드에 리스트를 생성합니다.
      *
-     * @param boardId 보드 ID
-     * @param title   리스트 제목
+     * @param boardId    보드 ID
+     * @param requestDto 수정할 리스트의 요청 DTO(title,order)
      * @return 생성된 리스트에 대한 응답 DTO(boardId,id,title,order)
      */
-    @PostMapping("{boardId}/lists")
+    @PostMapping("/{boardId}/lists")
     public ResponseEntity<ApiResponse<ListsResponseDto>> createList(
-            @PathVariable Long boardId,
-            @RequestBody String title) {
-        return ResponseEntity.ok(ApiResponse.success(listsService.createList( boardId, title)));
+            @AuthenticationPrincipal AuthUser user,
+            @PathVariable("boardId") Long boardId,
+            @RequestBody ListsCreateRequestDto requestDto) {
+        return ResponseEntity.ok(ApiResponse.success(listsService.createList(user, boardId, requestDto)));
     }
 
     /**
@@ -40,12 +44,13 @@ public class ListsController {
      * @param listsRequestDto 수정할 리스트의 요청 DTO(title,order)
      * @return 수정된 리스트에 대한 응답 DTO
      */
-    @PutMapping("{boardId}/lists/{listsId}")
+    @PutMapping("/{boardId}/lists/{listsId}")
     public ResponseEntity<ApiResponse<ListsResponseDto>> updateList(
-            @PathVariable Long boardId,
-            @PathVariable Long listsId,
+            @AuthenticationPrincipal AuthUser user,
+            @PathVariable("boardId") Long boardId,
+            @PathVariable("listsId") Long listsId,
             @RequestBody ListsRequestDto listsRequestDto) {
-        return ResponseEntity.ok(ApiResponse.success(listsService.updateList( boardId, listsId, listsRequestDto)));
+        return ResponseEntity.ok(ApiResponse.success(listsService.updateList(user, boardId, listsId, listsRequestDto)));
     }
 
     /**
@@ -55,11 +60,12 @@ public class ListsController {
      * @param listsId 삭제할 리스트 ID
      * @return 삭제 성공 메시지
      */
-    @DeleteMapping("{boardId}/lists/{listsId}")
+    @DeleteMapping("/{boardId}/lists/{listsId}")
     public ResponseEntity<ApiResponse<?>> deleteList(
-            @PathVariable Long boardId,
-            @PathVariable Long listsId) {
-        listsService.deleteLists(boardId, listsId);
+            @AuthenticationPrincipal AuthUser user,
+            @PathVariable("boardId") Long boardId,
+            @PathVariable("listsId") Long listsId) {
+        listsService.deleteLists(user, boardId, listsId);
         return ResponseEntity.ok(ApiResponse.success(null));
     }
 

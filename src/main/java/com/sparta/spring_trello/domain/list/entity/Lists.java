@@ -20,6 +20,7 @@ public class Lists {
     private Long id;
 
     private String title;
+
     @Column(name = "order_number")
     private Integer order;
 
@@ -31,14 +32,15 @@ public class Lists {
     @OneToMany(mappedBy = "lists", cascade = CascadeType.REMOVE,orphanRemoval = true)
     private final List<Card> card = new ArrayList<>();
 
-    public Lists(String title, Integer order) {
+    public Lists(Board board,String title, Integer order) {
+        this.board = board;
         this.title = title;
         this.order = order;
     }
 
     // 리스트 수정
-    public void updateLists(String title, Integer order) {
-        new Lists(title, order);
+    public void updateLists(Board board,String title, Integer order) {
+        new Lists(board,title, order);
     }
 
 }
