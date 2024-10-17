@@ -85,7 +85,7 @@ public class CommentService {
                 .anyMatch(a -> a.equals("READONLY"));
 
         if (isReadOnly) {
-            throw new CustomException(ErrorCode.READ_ONLY_USER_ERROR, "읽기 전용 사용자는 파일 업로드/삭제를 할 수 없습니다.");
+            throw new CustomException(ErrorCode.READ_ONLY_USER_ERROR, "읽기 전용 사용자는 댓글을 작성 할 수 없습니다.");
         }
     }
 }

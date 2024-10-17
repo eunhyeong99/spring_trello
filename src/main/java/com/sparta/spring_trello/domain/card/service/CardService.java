@@ -161,7 +161,7 @@ public class CardService {
                 .anyMatch(a -> a.equals("READONLY"));
 
         if (isReadOnly) {
-            throw new CustomException(ErrorCode.READ_ONLY_USER_ERROR, "읽기 전용 사용자는 파일 업로드/삭제를 할 수 없습니다.");
+            throw new CustomException(ErrorCode.READ_ONLY_USER_ERROR, "읽기 전용 사용자는 카드를 생성/삭제를 할 수 없습니다.");
         }
     }
 }
