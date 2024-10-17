@@ -29,6 +29,7 @@ public enum ErrorCode implements CodeInterface {
     USER_NOT_FOUND(404,"유저를 찾을 수 없습니다."),
     MEMBER_READ_ONLY(403,"권한이 없습니다."),
     WORKSPACE_NOT_FOUND(403,"워크 스페이스를 찾을 수 없습니다."),
+    BOARD_NON_BACK_GROUD(404,"배경색 또는 이미지는 반드시 입력해야 합니다."),
   
     READ_ONLY_MEMBER(1002, "읽기 전용 멤버입니다."),
     NOT_CARD_AUTHOR(1003, "카드 작성자가 아닙니다."),

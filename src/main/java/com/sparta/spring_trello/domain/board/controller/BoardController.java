@@ -6,6 +6,7 @@ import com.sparta.spring_trello.domain.board.dto.response.BoardDetailResponseDto
 import com.sparta.spring_trello.domain.board.dto.response.BoardResponseDto;
 import com.sparta.spring_trello.domain.board.dto.response.BoardSimpleResponseDto;
 import com.sparta.spring_trello.domain.board.service.BoardService;
+import com.sparta.spring_trello.domain.list.dto.request.BoardUpdateRequestDto;
 import com.sparta.spring_trello.util.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -29,18 +30,14 @@ public class BoardController {
      * 새로운 보드를 생성합니다.
      *
      * @param boardRequestDto 생성할 보드의 요청 DTO
-     * @param backgroundColor 선택적 배경 색상
-     * @param image           선택적 이미지 URL
      * @return 생성된 보드에 대한 응답 DTO
      */
     @PostMapping
     public ResponseEntity<ApiResponse<BoardResponseDto>> createBoard(
             @AuthenticationPrincipal AuthUser user,
-            @RequestBody BoardRequestDto boardRequestDto,
-            @RequestBody(required = false) String backgroundColor,
-            @RequestBody(required = false) String image
+            @RequestBody BoardRequestDto boardRequestDto
     ) {
-        return ResponseEntity.ok(ApiResponse.success(boardService.createBoard(user, boardRequestDto, backgroundColor, image)));
+        return ResponseEntity.ok(ApiResponse.success(boardService.createBoard(user, boardRequestDto)));
     }
 
     /**
@@ -70,20 +67,16 @@ public class BoardController {
     /**
      * 특정 보드를 수정합니다.
      *
-     * @param boardId         삭제할 보드 ID
-     * @param title           변경 할 제목
-     * @param backgroundColor 변경 할 배경 컬러
-     * @param image           변경할 이미지
+     * @param boardId 삭제할 보드 ID
      * @return 수정된 값 반환
+     * @Param BoardUpdateRequestDto 생성할 보드이 요청 DTO
      */
     @PutMapping("/{boardId}")
     public ResponseEntity<ApiResponse<BoardResponseDto>> updateBoard(
             @AuthenticationPrincipal AuthUser user,
             @PathVariable Long boardId,
-            @RequestBody String title,
-            @RequestBody(required = false) String backgroundColor,
-            @RequestBody(required = false) String image) {
-        return ResponseEntity.ok(ApiResponse.success(boardService.updateBoard(user, boardId, title, backgroundColor, image)));
+            @RequestBody BoardUpdateRequestDto RequestDto) {
+        return ResponseEntity.ok(ApiResponse.success(boardService.updateBoard(user, boardId, RequestDto)));
     }
 
     /**
@@ -93,7 +86,9 @@ public class BoardController {
      * @return 삭제 성공 응답
      */
     @DeleteMapping("/{boardId}")
-    public ResponseEntity<ApiResponse<?>> deleteBoard(@AuthenticationPrincipal AuthUser user, @PathVariable Long boardId) {
+    public ResponseEntity<ApiResponse<?>> deleteBoard(
+            @AuthenticationPrincipal AuthUser user,
+            @PathVariable Long boardId) {
         boardService.deleteBoard(user, boardId);
         return ResponseEntity.ok(ApiResponse.success(null));
     }

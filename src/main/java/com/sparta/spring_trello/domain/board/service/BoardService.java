@@ -11,6 +11,7 @@ import com.sparta.spring_trello.domain.card.entity.Card;
 import com.sparta.spring_trello.domain.card.repository.CardRepository;
 import com.sparta.spring_trello.domain.common.exception.CustomException;
 import com.sparta.spring_trello.domain.common.exception.ErrorCode;
+import com.sparta.spring_trello.domain.list.dto.request.BoardUpdateRequestDto;
 import com.sparta.spring_trello.domain.list.entity.Lists;
 import com.sparta.spring_trello.domain.list.repository.ListsRepository;
 import com.sparta.spring_trello.domain.member.entity.Member;
@@ -39,14 +40,20 @@ public class BoardService {
 
     // 보드 생성
     @Transactional
-    public BoardResponseDto createBoard(AuthUser user, BoardRequestDto boardRequestDto, String backgroundColor, String image) {
+    public BoardResponseDto createBoard(AuthUser user, BoardRequestDto boardRequestDto) {
         isValidUserMemberRole(user);
         Workspace workspace = isValidWorkspace(boardRequestDto.getWorkspaceId());
+
+        // 배경색과 이미지 중 하나는 반드시 존재해야 함
+        if ((boardRequestDto.getBackgroundColor() == null || boardRequestDto.getBackgroundColor().isEmpty()) &&
+                (boardRequestDto.getImage() == null || boardRequestDto.getImage().isEmpty())) {
+            throw  new CustomException(ErrorCode.BOARD_NON_BACK_GROUD);
+        }
         Board newboard = new Board(
                 workspace,
                 boardRequestDto.getTitle(),
-                backgroundColor,
-                image);
+                boardRequestDto.getBackgroundColor(),
+                boardRequestDto.getImage());
         Board savedBoard = boardRepository.save(newboard);
         return BoardResponseDto.from(savedBoard);
     }
@@ -79,11 +86,11 @@ public class BoardService {
 
     // 보드 수정
     @Transactional
-    public BoardResponseDto updateBoard(AuthUser user, Long boardId, String title, String backgroundColor, String image) {
+    public BoardResponseDto updateBoard(AuthUser user, Long boardId, BoardUpdateRequestDto requestDto) {
         isValidUserMemberRole(user);
         Board board = isValidBoard(boardId);
         Workspace workspace = board.getWorkspace();
-        board.updateBoard(workspace, title, backgroundColor, image);
+        board.updateBoard(workspace,requestDto.getTitle(),requestDto.getBackgroundColor(),requestDto.getImage());
         Board savedBoard = boardRepository.save(board);
         return BoardResponseDto.from(savedBoard);
     }
