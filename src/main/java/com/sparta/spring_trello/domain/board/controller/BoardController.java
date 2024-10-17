@@ -1,5 +1,6 @@
 package com.sparta.spring_trello.domain.board.controller;
 
+import com.sparta.spring_trello.config.AuthUser;
 import com.sparta.spring_trello.domain.board.dto.request.BoardRequestDto;
 import com.sparta.spring_trello.domain.board.dto.response.BoardDetailResponseDto;
 import com.sparta.spring_trello.domain.board.dto.response.BoardResponseDto;
@@ -8,6 +9,7 @@ import com.sparta.spring_trello.domain.board.service.BoardService;
 import com.sparta.spring_trello.util.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,34 +35,36 @@ public class BoardController {
      */
     @PostMapping
     public ResponseEntity<ApiResponse<BoardResponseDto>> createBoard(
+            @AuthenticationPrincipal AuthUser user,
             @RequestBody BoardRequestDto boardRequestDto,
             @RequestBody(required = false) String backgroundColor,
             @RequestBody(required = false) String image
     ) {
-        return ResponseEntity.ok(ApiResponse.success(boardService.createBoard( boardRequestDto, backgroundColor, image)));
+        return ResponseEntity.ok(ApiResponse.success(boardService.createBoard(user, boardRequestDto, backgroundColor, image)));
     }
 
     /**
-     * 사용자 이메일에 해당하는 모든 보드를 조회합니다.
-     * @param id 아이디
+     * 사용자에 해당하는 모든 보드를 조회합니다.
+     *
      * @return 사용자의 모든 보드에 대한 응답 DTO 리스트
      */
     @GetMapping
-    public ResponseEntity<ApiResponse<List<BoardSimpleResponseDto>>> getBoards(@RequestBody Long id) {
-        return ResponseEntity.ok(ApiResponse.success(boardService.getBoards(id)));
+    public ResponseEntity<ApiResponse<List<BoardSimpleResponseDto>>> getBoards(
+            @AuthenticationPrincipal AuthUser user) {
+        return ResponseEntity.ok(ApiResponse.success(boardService.getBoards(user)));
     }
 
     /**
      * 특정 보드의 상세 정보를 조회합니다.
-     *
      *
      * @param boardId 조회할 보드 ID
      * @return 특정 보드에 대한 상세 응답 DTO
      */
     @GetMapping("/{boardId}")
     public ResponseEntity<ApiResponse<BoardDetailResponseDto>> getBoard(
+            @AuthenticationPrincipal AuthUser user,
             @PathVariable Long boardId) {
-        return ResponseEntity.ok(ApiResponse.success(boardService.getBoard( boardId)));
+        return ResponseEntity.ok(ApiResponse.success(boardService.getBoard(user, boardId)));
     }
 
     /**
@@ -74,11 +78,12 @@ public class BoardController {
      */
     @PutMapping("/{boardId}")
     public ResponseEntity<ApiResponse<BoardResponseDto>> updateBoard(
+            @AuthenticationPrincipal AuthUser user,
             @PathVariable Long boardId,
             @RequestBody String title,
             @RequestBody(required = false) String backgroundColor,
             @RequestBody(required = false) String image) {
-        return ResponseEntity.ok(ApiResponse.success(boardService.updateBoard( boardId, title, backgroundColor, image)));
+        return ResponseEntity.ok(ApiResponse.success(boardService.updateBoard(user, boardId, title, backgroundColor, image)));
     }
 
     /**
@@ -88,8 +93,8 @@ public class BoardController {
      * @return 삭제 성공 응답
      */
     @DeleteMapping("/{boardId}")
-    public ResponseEntity<ApiResponse<?>> deleteBoard( @PathVariable Long boardId) {
-        boardService.deleteBoard( boardId);
+    public ResponseEntity<ApiResponse<?>> deleteBoard(@AuthenticationPrincipal AuthUser user, @PathVariable Long boardId) {
+        boardService.deleteBoard(user, boardId);
         return ResponseEntity.ok(ApiResponse.success(null));
     }
 
