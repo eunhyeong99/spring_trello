@@ -33,15 +33,15 @@ public class MemberService {
 
         // 추가할 사용자가 존재하는지 확인
         User user = userRepository.findById(memberRequest.getUserId())
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         // 추가할 워크스페이스가 존재하는지 확인
         Workspace workspace = workspaceRepository.findById(workspaceId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.WORKSPACE_NOT_FOUND));
 
-        // 이미 등록된 사용자인지 확인
+        // 이미 등록된 멤버인지 확인
         if (memberRepository.findByUserAndWorkspace(user, workspace).isPresent()) {
-            throw new CustomException(ErrorCode.BAD_REQUEST);
+            throw new CustomException(ErrorCode.DUPLICATE_MEMBER);
         }
 
         // 멤버 생성 후 DB에 저장
@@ -60,7 +60,7 @@ public class MemberService {
 
         // 역할 수정할 멤버가 존재하는지 확인
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
         // 멤버 역할 수정
         member.update(newRole);
@@ -80,7 +80,7 @@ public class MemberService {
 
         // 삭제할 멤버가 존재하는지 확인
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
         // 해당 멤버 삭제
         memberRepository.delete(member);
